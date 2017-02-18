@@ -5,12 +5,22 @@ namespace Zomato.API.Domain
 {
     internal sealed class CategoryResponse
     {
-        [JsonProperty("category_id")]
-        public string ID { get; set; }
+        [JsonProperty("id")]
+        public int ID { get; set; }
 
-        [JsonProperty("category_name")]
+        [JsonProperty("name")]
         public string Name { get; set; }
     }
 
-    internal sealed class CategoriesResponse : List<CategoryResponse> { }
+    internal sealed class CategoriesResponse
+    {
+        [JsonProperty("categories")]
+        public CategoryResponse Categories { get; set; }
+    }
+
+    internal sealed class CategoriesRootObject
+    {
+        [JsonProperty("categories")]
+        public List<CategoriesResponse> Categories { get; set; }
+    }
 }

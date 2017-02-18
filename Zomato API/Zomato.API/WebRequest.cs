@@ -17,6 +17,7 @@ namespace Zomato.API
 
         #region Private Const Fields
         private const string apiRequestUrl = "https://developers.zomato.com/api/v2.1/";
+        private const string userKeyHeaderKey = "user-key";
         #endregion
 
         #region Constructor
@@ -26,23 +27,26 @@ namespace Zomato.API
         }
         #endregion
 
-        #region Internal Async Methods
-        // TODO: Refactor this method.
-        internal async Task<CategoriesResponse> SelectCategories()
+        #region Private Properties
+        private KeyValuePair<string, string> UserKey
         {
-            CategoriesResponse categoriesResponse = null;
-            var businessController = new BusinessController();
-            var postUrl = string.Concat(apiRequestUrl, BusinessActions.SelectCategories);
-            var postHeaders = new List<KeyValuePair<string, string>>();
-            postHeaders.Add(new KeyValuePair<string, string>("user-key", apiKey));
+            get
+            {
+                return new KeyValuePair<string, string>(userKeyHeaderKey, apiKey);
+            }
+        }
+        #endregion
 
-            // TODO: Fix POST not returning response.
-            var response = await webRequest.Post(postUrl, null, postHeaders);
+        #region Internal Async Methods
+        internal async Task<CategoriesRootObject> SelectCategories()
+        {
+            CategoriesRootObject categoriesResponse = null;
+
+            var getHeaders = new List<KeyValuePair<string, string>>() { UserKey };
+            var response = await webRequest.Get(CommonActions.SelectCategories, getHeaders);
 
             if (!string.IsNullOrEmpty(response))
-            {
-                categoriesResponse = JsonConvert.DeserializeObject<CategoriesResponse>(response);
-            }
+                categoriesResponse = JsonConvert.DeserializeObject<CategoriesRootObject>(response);
 
             return categoriesResponse;
         }

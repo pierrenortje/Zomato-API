@@ -19,23 +19,27 @@ namespace Zomato.API
 
         #region Public Async Methods
         /// <summary>
-        /// Get a list of categories.
+        /// Select a list of categories.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of categories.</returns>
         public async Task<Categories> SelectCategories()
         {
             Categories categories = null;
-            CategoriesResponse categoriesResponse = null;
+            CategoriesRootObject categoriesResponse = null;
 
             categoriesResponse = await webRequest.SelectCategories();
 
-            if (categoriesResponse != null)
-            {
-                categories = new Categories();
+            if (categoriesResponse?.Categories == null)
+                return categories;
 
-                foreach (var category in categoriesResponse)
-                    categories.Add(new Category { ID = category.ID, Name = category.Name });
-            }
+            categories = new Categories();
+
+            foreach (var category in categoriesResponse.Categories)
+                categories.Add(new Category
+                {
+                    ID = category.Categories.ID,
+                    Name = category.Categories.Name
+                });
 
             return categories;
         }

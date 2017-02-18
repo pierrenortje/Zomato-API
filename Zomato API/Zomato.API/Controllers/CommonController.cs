@@ -1,6 +1,6 @@
 ﻿namespace Zomato.API.Controllers
 {
-    internal sealed class BusinessController : BaseController
+    internal sealed class CommonController : BaseController
     {
         #region Internal Methods
         public override string GetUrl(string actionName)
@@ -10,7 +10,7 @@
         #endregion
     }
 
-    internal sealed class BusinessActions
+    internal sealed class CommonActions
     {
         #region Actions
         public const string SelectCategories = "categories";
