@@ -55,8 +55,13 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
+    <Compile Include="Controllers\RestaurantController.cs" />
     <Compile Include="Domain\CategoryResponse.cs" />
     <Compile Include="Domain\Category.cs" />
+    <Compile Include="Domain\City.cs" />
+    <Compile Include="Domain\CityResponse.cs" />
+    <Compile Include="Domain\Country.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="WebRequest.cs" />
     <Compile Include="ZomatoService.cs" />

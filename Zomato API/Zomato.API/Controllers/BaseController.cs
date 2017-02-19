@@ -2,6 +2,9 @@
 {
     internal abstract class BaseController
     {
-        public abstract string GetUrl(string actionName);
+        internal string GetUrl(string actionName)
+        {
+            return $"{actionName}";
+        }
     }
 }

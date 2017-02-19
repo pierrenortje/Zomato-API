@@ -43,6 +43,40 @@ namespace Zomato.API
 
             return categories;
         }
+
+        /// <summary>
+        /// Select a list of cities.
+        /// </summary>
+        /// <returns>A list of categories.</returns>
+        public async Task<Cities> SelectCities(string queryText)
+        {
+            Cities cities = null;
+            CitiesRootObject citiesResponse = null;
+
+            citiesResponse = await webRequest.SelectCities(queryText);
+
+            if (citiesResponse?.Locations == null)
+                return cities;
+
+            cities = new Cities();
+
+            foreach (var city in citiesResponse.Locations)
+            {
+                var country = new Country
+                {
+                    ID = city.CountryID,
+                    Name = city.CountryName
+                };
+                cities.Add(new City
+                {
+                    ID = city.ID,
+                    Name = city.Name,
+                    Country = country
+                });
+            }
+
+            return cities;
+        }
         #endregion
 
         #region IDisposable Members

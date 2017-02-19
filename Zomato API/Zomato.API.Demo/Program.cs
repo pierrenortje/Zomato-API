@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Zomato.API.Domain;
 
 /*
  * TODO: 2017-02-18 - pierre.nortje - Need to add support for the "Location"- and "Restaurant"-controller.
@@ -62,6 +63,7 @@ namespace Zomato.API.Demo
         private static async void MainAsync()
         {
             await SelectCategories();
+            await SelectCities("Cape Town");
         }
 
         private static async Task SelectCategories()
@@ -75,7 +77,21 @@ namespace Zomato.API.Demo
             Console.WriteLine(new string('=', 20));
 
             foreach (var category in categories)
-                Console.WriteLine($"ID: {category.ID}. Name: {category.Name}");
+                Console.WriteLine($"ID: {category.ID}.\tName: {category.Name}.");
+        }
+
+        private static async Task SelectCities(string queryText)
+        {
+            var cities = await zomatoService.SelectCities(queryText);
+
+            if (cities == null)
+                throw new Exception("No cities found.");
+
+            Console.WriteLine("Printing cities names:");
+            Console.WriteLine(new string('=', 20));
+
+            foreach (var city in cities)
+                Console.WriteLine($"Country: {city.Country.Name.PadRight(10)}.\tID: {city.ID.ToString()}.\tName: {city.Name}.");
         }
         #endregion
     }

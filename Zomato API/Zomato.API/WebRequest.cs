@@ -23,7 +23,10 @@ namespace Zomato.API
         #region Constructor
         internal WebRequest()
         {
-            webRequest = new NTEC.Net.WebRequest(apiRequestUrl);
+            webRequest = new NTEC.Net.WebRequest(apiRequestUrl)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
         }
         #endregion
 
@@ -42,13 +45,29 @@ namespace Zomato.API
         {
             CategoriesRootObject categoriesResponse = null;
 
-            var getHeaders = new List<KeyValuePair<string, string>>() { UserKey };
-            var response = await webRequest.Get(CommonActions.SelectCategories, getHeaders);
+            var response = await webRequest.Get(CommonAction.SelectCategories);
 
             if (!string.IsNullOrEmpty(response))
                 categoriesResponse = JsonConvert.DeserializeObject<CategoriesRootObject>(response);
 
             return categoriesResponse;
+        }
+
+        internal async Task<CitiesRootObject> SelectCities(string queryText)
+        {
+            CitiesRootObject citiesResponse = null;
+
+            var parameters = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("q", queryText)
+            };
+
+            var response = await webRequest.Get(CommonAction.SelectCities, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                citiesResponse = JsonConvert.DeserializeObject<CitiesRootObject>(response);
+
+            return citiesResponse;
         }
         #endregion
 
