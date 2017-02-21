@@ -62,8 +62,12 @@ namespace Zomato.API.Demo
         #region Private Static Methods
         private static async void MainAsync()
         {
-            await SelectCategories();
-            await SelectCities("Cape Town");
+            decimal longitude = (decimal)-33.9249;
+            decimal latitude = (decimal)18.4241;
+
+            //await SelectCategories();
+            //await SelectCities("Cape Town");
+            await SelectCities(null, longitude, latitude);
         }
 
         private static async Task SelectCategories()
@@ -82,7 +86,11 @@ namespace Zomato.API.Demo
 
         private static async Task SelectCities(string queryText)
         {
-            var cities = await zomatoService.SelectCities(queryText);
+            await SelectCities(queryText, null, null);
+        }
+        private static async Task SelectCities(string queryText, decimal? latitude, decimal? longitude)
+        {
+            var cities = await zomatoService.SelectCities(queryText, latitude, longitude);
 
             if (cities == null)
                 throw new Exception("No cities found.");

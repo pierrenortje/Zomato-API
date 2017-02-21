@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Zomato.API.Domain
 {
-    internal class Location
+    internal sealed class Location
     {
         [JsonProperty("id")]
         public int ID { get; set; }
@@ -39,9 +39,9 @@ namespace Zomato.API.Domain
         public string StateCode { get; set; }
     }
 
-    internal class Locations : List<Location> { }
+    internal sealed class Locations : List<Location> { }
 
-    internal class CitiesRootObject
+    internal sealed class CitiesRootObject
     {
         [JsonProperty("location_suggestions")]
         public Locations Locations { get; set; }

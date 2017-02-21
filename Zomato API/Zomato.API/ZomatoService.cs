@@ -50,10 +50,18 @@ namespace Zomato.API
         /// <returns>A list of categories.</returns>
         public async Task<Cities> SelectCities(string queryText)
         {
+            return await SelectCities(queryText, null, null);
+        }
+        /// <summary>
+        /// Select a list of cities.
+        /// </summary>
+        /// <returns>A list of categories.</returns>
+        public async Task<Cities> SelectCities(string queryText, decimal? latitude, decimal? longitude)
+        {
             Cities cities = null;
             CitiesRootObject citiesResponse = null;
 
-            citiesResponse = await webRequest.SelectCities(queryText);
+            citiesResponse = await webRequest.SelectCities(queryText, latitude, longitude);
 
             if (citiesResponse?.Locations == null)
                 return cities;
