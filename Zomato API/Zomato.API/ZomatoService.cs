@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Zomato.API.Domain;
 
 namespace Zomato.API
 {
-    public sealed class ZomatoService : IDisposable
+    public sealed class ZomatoService
     {
         #region Private Fields
         private WebRequest webRequest = null;
@@ -47,21 +48,44 @@ namespace Zomato.API
         /// <summary>
         /// Select a list of cities.
         /// </summary>
+        /// <param name="queryText">The query text to search for.</param>
         /// <returns>A list of categories.</returns>
-        public async Task<Cities> SelectCities(string queryText)
+        public async Task<Cities> SelectCities(string queryText, int? count = null)
         {
-            return await SelectCities(queryText, null, null);
+            return await SelectCities(queryText, null, null, null, count);
         }
         /// <summary>
         /// Select a list of cities.
         /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
         /// <returns>A list of categories.</returns>
-        public async Task<Cities> SelectCities(string queryText, decimal? latitude, decimal? longitude)
+        public async Task<Cities> SelectCities(double latitude, double longitude, int? count = null)
+        {
+            return await SelectCities(null, latitude, longitude, null, count);
+        }
+        /// <summary>
+        /// Select a list of cities.
+        /// </summary>
+        /// <param name="cityIDs">A list of city IDs.</param>
+        /// <returns>A list of categories.</returns>
+        public async Task<Cities> SelectCities(int[] cityIDs, int? count = null)
+        {
+            return await SelectCities(null, null, null, cityIDs, count);
+        }
+        #endregion
+
+        #region Private Async Methods
+        /// <summary>
+        /// Select a list of cities.
+        /// </summary>
+        /// <returns>A list of categories.</returns>
+        private async Task<Cities> SelectCities(string queryText, double? latitude, double? longitude, int[] cityIDs, int? count)
         {
             Cities cities = null;
             CitiesRootObject citiesResponse = null;
 
-            citiesResponse = await webRequest.SelectCities(queryText, latitude, longitude);
+            citiesResponse = await webRequest.SelectCities(queryText, latitude, longitude, cityIDs, count);
 
             if (citiesResponse?.Locations == null)
                 return cities;
@@ -84,16 +108,6 @@ namespace Zomato.API
             }
 
             return cities;
-        }
-        #endregion
-
-        #region IDisposable Members
-        public void Dispose()
-        {
-            if (webRequest != null)
-            {
-                webRequest = null;
-            }
         }
         #endregion
     }

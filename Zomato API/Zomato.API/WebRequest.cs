@@ -8,7 +8,7 @@ using Zomato.API.Util;
 
 namespace Zomato.API
 {
-    internal sealed class WebRequest : IDisposable
+    internal sealed class WebRequest
     {
         #region Private Fields
         private NTEC.Net.WebRequest webRequest = null;
@@ -53,7 +53,7 @@ namespace Zomato.API
             return categoriesResponse;
         }
 
-        internal async Task<CitiesRootObject> SelectCities(string queryText, decimal? latitude, decimal? longitude)
+        internal async Task<CitiesRootObject> SelectCities(string queryText, double? latitude, double? longitude, int[] cityIDs, int? count)
         {
             if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
                 throw new Exception("You need to specify both the latitude and longitude.");
@@ -71,22 +71,18 @@ namespace Zomato.API
                 parameters.Add(new KeyValuePair<string, string>("lon", longitude.Value.ToString()));
             }
 
+            if (cityIDs?.Length > 0)
+                parameters.Add(new KeyValuePair<string, string>("city_ids", string.Join(",", cityIDs)));
+
+            if (count.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
+
             var response = await webRequest.Get(CommonAction.SelectCities, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 citiesResponse = JsonConvert.DeserializeObject<CitiesRootObject>(response);
 
             return citiesResponse;
-        }
-        #endregion
-
-        #region IDisposable Members
-        public void Dispose()
-        {
-            if (webRequest != null)
-            {
-                webRequest = null;
-            }
         }
         #endregion
     }
