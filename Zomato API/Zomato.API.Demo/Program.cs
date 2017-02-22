@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Zomato.API.Domain;
 
@@ -25,7 +26,7 @@ namespace Zomato.API.Demo
     /// 
     ///     CommonController:
     ///         • GET /categories           [COMPLETED]
-    ///         • GET /cities               [TBC]
+    ///         • GET /cities               [COMPLETED]
     ///         • GET /collections          [TBC]
     ///         • GET /cuisines             [TBC]
     ///         • GET /establishments       [TBC]
@@ -48,6 +49,11 @@ namespace Zomato.API.Demo
     {
         #region Private Static Fields
         private static ZomatoService zomatoService = new ZomatoService();
+
+        private static double longitude = -33.9249;
+        private static double latitude = 18.4241;
+
+        private static int[] cityIDs = new int[] { 64 };
         #endregion
 
         #region Public Static Methods
@@ -63,10 +69,18 @@ namespace Zomato.API.Demo
         private static async void MainAsync()
         {
             await SelectCategories();
-            await SelectCities("Cape Town");
-            await SelectCollections(64);
-        }
 
+            await SelectCities("Cape Town");
+
+            await SelectCollections(64);
+
+            await SelectCities(longitude, latitude);
+            await SelectCities(cityIDs);
+            await SelectCities("Cape Town", 5);
+        }
+        #endregion
+
+        #region Categories
         private static async Task SelectCategories()
         {
             var categories = await zomatoService.SelectCategories();
@@ -74,27 +88,57 @@ namespace Zomato.API.Demo
             if (categories == null)
                 throw new Exception("No categories found.");
 
-            Console.WriteLine("Printing category names:");
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine("All categories.");
             Console.WriteLine(new string('=', 20));
 
             foreach (var category in categories)
                 Console.WriteLine($"ID: {category.ID}.\tName: {category.Name}.");
+
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Cities
+        private static async Task SelectCities(string queryText, int? count = null)
+        {
+            var cities = await zomatoService.SelectCities(queryText, count);
+
+            PrintCitiesResponse(cities, "Cities by name.");
+        }
+        private static async Task SelectCities(int[] cityIDs, int? count = null)
+        {
+            var cities = await zomatoService.SelectCities(cityIDs, count);
+
+            PrintCitiesResponse(cities, "Cities by city IDs.");
+        }
+        private static async Task SelectCities(double latitude, double longitude, int? count = null)
+        {
+            var cities = await zomatoService.SelectCities(latitude, longitude, count);
+
+            PrintCitiesResponse(cities, "Cities by latitude and longitude.");
         }
 
-        private static async Task SelectCities(string queryText)
+        private static void PrintCitiesResponse(Cities cities, string customMessage)
         {
-            var cities = await zomatoService.SelectCities(queryText);
-
             if (cities == null)
                 throw new Exception("No cities found.");
 
-            Console.WriteLine("Printing cities names:");
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(customMessage);
             Console.WriteLine(new string('=', 20));
 
             foreach (var city in cities)
-                Console.WriteLine($"Country: {city.Country.Name.PadRight(10)}.\tID: {city.ID.ToString()}.\tName: {city.Name}.");
-        }
+            {
+                Console.WriteLine($"Country: {city.Country.Name}");
+                Console.WriteLine($"\tID: {city.ID.ToString().PadRight(20)} Name: {city.Name}.");
+            }
 
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Collections
         private static async Task SelectCollections(int queryText)
         {
             var collections = await zomatoService.SelectCollections(queryText);
@@ -109,7 +153,7 @@ namespace Zomato.API.Demo
             foreach(var collection in collections) {
                 Console.WriteLine($"ID: {collection.ID.ToString()}. \tTitle: {collection.Title}.");
             }
-        }
+        }        
         #endregion
     }
 }

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Zomato.API.Domain
+﻿namespace Zomato.API.Domain
 {
-    public class Country
+    public sealed class Country
     {
         public int ID { get; set; }
         public string Name { get; set; }
