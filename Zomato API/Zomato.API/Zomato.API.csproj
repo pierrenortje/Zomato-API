@@ -61,6 +61,8 @@
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\City.cs" />
     <Compile Include="Domain\CityResponse.cs" />
+    <Compile Include="Domain\CollectionResponse.cs" />
+    <Compile Include="Domain\Collection.cs" />
     <Compile Include="Domain\Country.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="WebRequest.cs" />

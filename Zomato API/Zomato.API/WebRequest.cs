@@ -69,6 +69,24 @@ namespace Zomato.API
 
             return citiesResponse;
         }
+
+        internal async Task<CollectionRootObject> SelectCollections(int queryText)
+        {
+
+            CollectionRootObject collectionsResponse = null;
+
+            var parameters = new List<KeyValuePair<string, string>> {
+                new KeyValuePair<string, string>("city_id", queryText.ToString())
+            };
+
+            var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
+
+            if(!string.IsNullOrEmpty(response)) {
+                collectionsResponse = JsonConvert.DeserializeObject<CollectionRootObject>(response);
+            }
+
+            return collectionsResponse;
+        }
         #endregion
 
         #region IDisposable Members

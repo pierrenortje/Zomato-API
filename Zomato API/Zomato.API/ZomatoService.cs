@@ -77,6 +77,37 @@ namespace Zomato.API
 
             return cities;
         }
+
+        /// <summary>
+        /// Get a list of restaurants in a city
+        /// </summary> 
+        /// <returns>A list of collections of restaurants</returns>
+        public async Task<Collections> SelectCollections(int queryText)
+        {
+            Collections collections = null;
+            CollectionRootObject collectionResponse = null;
+
+            collectionResponse = await webRequest.SelectCollections(queryText);
+
+            if(collectionResponse?.Restaurants == null) {
+                return collections;
+            }
+
+            collections = new Collections();
+
+            foreach(var restaurant in collectionResponse.Restaurants) {
+                var entry = restaurant.Restaurant;
+
+                collections.Add(new Collection{
+                    ID = entry.Collection_id,
+                    Title = entry.Title,
+                    Url = entry.Url,
+                    Description = entry.Description
+                });
+            }
+
+            return collections;
+        }
         #endregion
 
         #region IDisposable Members

@@ -64,6 +64,7 @@ namespace Zomato.API.Demo
         {
             await SelectCategories();
             await SelectCities("Cape Town");
+            await SelectCollections(64);
         }
 
         private static async Task SelectCategories()
@@ -92,6 +93,22 @@ namespace Zomato.API.Demo
 
             foreach (var city in cities)
                 Console.WriteLine($"Country: {city.Country.Name.PadRight(10)}.\tID: {city.ID.ToString()}.\tName: {city.Name}.");
+        }
+
+        private static async Task SelectCollections(int queryText)
+        {
+            var collections = await zomatoService.SelectCollections(queryText);
+
+            if(collections == null) {
+                throw new Exception ("No collections found");
+            }
+
+            Console.WriteLine("Printing collections");
+            Console.WriteLine(new string('=', 20));
+
+            foreach(var collection in collections) {
+                Console.WriteLine($"ID: {collection.ID.ToString()}. \tTitle: {collection.Title}.");
+            }
         }
         #endregion
     }
