@@ -85,34 +85,31 @@ namespace Zomato.API
             return citiesResponse;
         }
 
-        internal async Task<CollectionRootObject> SelectCollections(int? queryText, double? lat, double? lon, int? count)
+        internal async Task<CollectionsRootObject> SelectCollections(int? cityID, double? latitude, double? longitude, int? count)
         {
-            CollectionRootObject collectionsResponse = null;
+            CollectionsRootObject collectionsResponse = null;
 
-            if (!lat.HasValue && lon.HasValue || lat.HasValue && !lon.HasValue) {
+            if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
                 throw new Exception("You need to specify both the latitude and longitude.");
-            }
 
             var parameters = new List<KeyValuePair<string, string>>();
 
-            if(queryText.HasValue) {
-                parameters.Add(new KeyValuePair<string, string>("city_id", queryText.ToString()));
+            if (latitude.HasValue && longitude.HasValue)
+            {
+                parameters.Add(new KeyValuePair<string, string>("lat", latitude.Value.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("lon", longitude.Value.ToString()));
             }
 
-            if(lat.HasValue && lon.HasValue) {
-                parameters.Add(new KeyValuePair<string, string>("lat", lat.Value.ToString()));
-                parameters.Add(new KeyValuePair<string, string>("lon", lon.Value.ToString()));
-            }
+            if (cityID.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("city_id", cityID.ToString()));
 
-            if(count.HasValue) {
-                parameters.Add(new KeyValuePair<string, string>("count",count.ToString()));
-            }
+            if (count.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
 
             var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
 
-            if(!string.IsNullOrEmpty(response)) {
-                collectionsResponse = JsonConvert.DeserializeObject<CollectionRootObject>(response);
-            }
+            if (!string.IsNullOrEmpty(response))
+                collectionsResponse = JsonConvert.DeserializeObject<CollectionsRootObject>(response);
 
             return collectionsResponse;
         }

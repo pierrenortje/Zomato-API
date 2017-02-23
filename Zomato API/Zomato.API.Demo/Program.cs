@@ -68,15 +68,14 @@ namespace Zomato.API.Demo
         #region Private Static Methods
         private static async void MainAsync()
         {
-            await SelectCategories();
+            //await SelectCategories();
 
-            await SelectCities("Cape Town");
+            //await SelectCities("Cape Town");
+            //await SelectCities("Cape Town", 5);
+            //await SelectCities(longitude, latitude);
+            //await SelectCities(cityIDs);
 
-            await SelectCollections(64,2);
-
-            await SelectCities(longitude, latitude);
-            await SelectCities(cityIDs);
-            await SelectCities("Cape Town", 5);
+            //await SelectCollections(64);
         }
         #endregion
 
@@ -139,33 +138,45 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Collections
-        private static async Task SelectCollections(int queryText, int? count = null)
+        private static async Task SelectCollections(int cityID, int? count = null)
         {
-            var collections = await zomatoService.SelectCollections(queryText, count);
+            var collections = await zomatoService.SelectCollections(cityID, count);
 
-            PrintCollectionResponse(collections,"Collection by city ID");
+            PrintCollectionResponse(collections, "Collections by city ID.");
+        }
+        private static async Task SelectCollections(double latitude, double longitude, int? count = null)
+        {
+            var collections = await zomatoService.SelectCollections(latitude, longitude, count);
+
+            PrintCollectionResponse(collections, "Collections by latitude and longitude.");
         }
 
-        private static async Task SelectCollections(double lat, double lon, int? count = null)
-        {
-            var collections = await zomatoService.SelectCollections(lat, lon, count);
-        }
-        
         private static void PrintCollectionResponse(Collections collections, string customMessage)
         {
-            if(collections == null) {
-                throw new Exception ("No collection found");
-            }
+            if (collections == null)
+                throw new Exception("No collections found.");
 
-            Console.WriteLine("Printing collections");
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(customMessage);
             Console.WriteLine(new string('=', 20));
 
-            foreach(var collection in collections) {
-                Console.WriteLine($"ID: {collection.ID.ToString()}. \tTitle: {collection.Title}.");
+            Console.WriteLine($"Share Url: {collections.ShareUrl}");
+            Console.WriteLine(new string('-', 10));
+
+            Console.WriteLine("\n\n");
+
+            foreach (var collection in collections)
+            {
+                Console.WriteLine($"ID: {collection.ID.ToString()}");
+                Console.WriteLine($"Title: {collection.Title}");
+                Console.WriteLine($"Description: {collection.Description}");
+                Console.WriteLine($"ImageUrl: {collection.ImageUrl}");
+                Console.WriteLine($"Url: {collection.Url}");
+                Console.WriteLine(new string('-', 10));
             }
 
             Console.WriteLine("\n\n");
-        }       
+        }
         #endregion
     }
 }

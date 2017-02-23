@@ -1,54 +1,56 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-
 namespace Zomato.API.Domain
 {
-    internal sealed class Restaurants
+    internal sealed class CollectionResponse
     {
         [JsonProperty("collection_id")]
-        public int Collection_id { get; set; }
+        internal int ID { get; set; }
 
+        /// <summary>
+        /// Number of restaurants in the collection.
+        /// </summary>
         [JsonProperty("res_count")]
-        public int Res_count { get; set; }
+        internal int TotalRestaurants { get; set; }
 
         [JsonProperty("image_url")]
-        public string Image_url { get; set; }
+        internal string ImageUrl { get; set; }
 
         [JsonProperty("url")]
-        public string Url { get; set; }
+        internal string Url { get; set; }
 
         [JsonProperty("title")]
-        public string Title { get; set; }
+        internal string Title { get; set; }
 
         [JsonProperty("description")]
-        public string Description { get; set; }
+        internal string Description { get; set; }
 
         [JsonProperty("share_url")]
-        public string Share_url { get; set; }
+        internal string ShareUrl { get; set; }
     }
 
-    internal sealed class RestaurantCollection
+    internal sealed class CollectionsResponse
     {
         [JsonProperty("collection")]
-        public Restaurants Restaurants { get; set; }
+        internal CollectionResponse Collections { get; set; }
     }
 
-    internal sealed class CollectionRootObject
+    internal sealed class CollectionsRootObject
     {
         [JsonProperty("collections")]
-        public List<RestaurantCollection> RestaurantCollection { get; set; }
+        internal List<CollectionsResponse> Collections { get; set; }
 
         [JsonProperty("has_more")]
-        public int Has_more { get; set; }
+        internal int HasMore { get; set; }
 
         [JsonProperty("share_url")]
-        public string Share_url { get; set; }
+        internal string ShareUrl { get; set; }
 
         [JsonProperty("display_text")]
-        public string Display_text { get; set; }
+        internal string DisplayText { get; set; }
 
         [JsonProperty("has_total")]
-        public int Has_total { get; set; }
+        internal int HasTotal { get; set; }
     }
 }
