@@ -213,5 +213,9 @@ namespace Zomato.API.Demo
             Console.WriteLine("\n\n");
         }
         #endregion
+
+        #region Geocode
+
+        #endregion
     }
 }

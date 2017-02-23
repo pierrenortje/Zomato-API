@@ -132,6 +132,11 @@ namespace Zomato.API
 
             return cuisinesRootObject;
         }
+
+        internal async Task<GeocodeRootObject> SelectGeocodeAsync()
+        {
+
+        }
         #endregion
     }
 }
