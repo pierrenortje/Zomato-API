@@ -62,20 +62,13 @@ namespace Zomato.API
 
             var parameters = new List<KeyValuePair<string, string>>();
 
+            AppendBaseParameters(ref parameters, null, latitude, longitude, count);
+
             if (!string.IsNullOrEmpty(queryText))
                 parameters.Add(new KeyValuePair<string, string>("q", queryText));
 
-            if (latitude.HasValue && longitude.HasValue)
-            {
-                parameters.Add(new KeyValuePair<string, string>("lat", latitude.Value.ToString()));
-                parameters.Add(new KeyValuePair<string, string>("lon", longitude.Value.ToString()));
-            }
-
             if (cityIDs?.Length > 0)
                 parameters.Add(new KeyValuePair<string, string>("city_ids", string.Join(",", cityIDs)));
-
-            if (count.HasValue)
-                parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
 
             var response = await webRequest.Get(CommonAction.SelectCities, parameters);
 
@@ -94,6 +87,39 @@ namespace Zomato.API
 
             var parameters = new List<KeyValuePair<string, string>>();
 
+            AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
+
+            var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                collectionsResponse = JsonConvert.DeserializeObject<CollectionsRootObject>(response);
+
+            return collectionsResponse;
+        }
+
+        internal async Task<CuisinesRootObject> SelectCuisines(int? cityID, double? latitude, double? longitude, int? count)
+        {
+            CuisinesRootObject cuisinesRootObject = null;
+
+            if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
+                throw new Exception("You need to specify both the latitude and longitude.");
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
+
+            var response = await webRequest.Get(CommonAction.SelectCuisines, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                cuisinesRootObject = JsonConvert.DeserializeObject<CuisinesRootObject>(response);
+
+            return cuisinesRootObject;
+        }
+        #endregion
+
+        #region Private Methods
+        private void AppendBaseParameters(ref List<KeyValuePair<string, string>> parameters, int? cityID, double? latitude, double? longitude, int? count)
+        {
             if (latitude.HasValue && longitude.HasValue)
             {
                 parameters.Add(new KeyValuePair<string, string>("lat", latitude.Value.ToString()));
@@ -105,13 +131,6 @@ namespace Zomato.API
 
             if (count.HasValue)
                 parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
-
-            var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
-
-            if (!string.IsNullOrEmpty(response))
-                collectionsResponse = JsonConvert.DeserializeObject<CollectionsRootObject>(response);
-
-            return collectionsResponse;
         }
         #endregion
     }

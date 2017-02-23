@@ -76,7 +76,7 @@ namespace Zomato.API
         }
 
         /// <summary>
-        /// Select a list of restaurants in a city.
+        /// Select a collection of restaurants in a city.
         /// </summary>
         /// <param name="cityID">The city's ID.</param>
         /// <param name="count">Max results to return.</param>
@@ -86,7 +86,7 @@ namespace Zomato.API
             return await SelectCollections(cityID, null, null, count);
         }
         /// <summary>
-        /// Select a list of restaurants in a city.
+        /// Select a collection of restaurants by latitude and longitude.
         /// </summary>
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
@@ -95,6 +95,28 @@ namespace Zomato.API
         public async Task<Collections> SelectCollections(double latitude, double longitude, int? count = null)
         {
             return await SelectCollections(null, latitude, longitude, count);
+        }
+
+        /// <summary>
+        /// Select a list of cuisines in a city.
+        /// </summary>
+        /// <param name="cityID">The city's ID.</param>
+        /// <param name="count">Max results to return.</param>
+        /// <returns>A list of cuisines.</returns>
+        public async Task<Cuisines> SelectCuisines(int cityID, int? count = null)
+        {
+            return await SelectCuisines(cityID, null, null, count);
+        }
+        /// <summary>
+        /// Select a list of cuisines by latitude and longitude.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="count">Max results to return.</param>
+        /// <returns>A list of cuisines.</returns>
+        public async Task<Cuisines> SelectCuisines(double latitude, double longitude, int? count = null)
+        {
+            return await SelectCuisines(null, latitude, longitude, count);
         }
         #endregion
 
@@ -156,6 +178,28 @@ namespace Zomato.API
             collections.ShareUrl = collectionResponse.ShareUrl;
 
             return collections;
+        }
+
+        private async Task<Cuisines> SelectCuisines(int? cityID, double? latitude, double? longitude, int? count)
+        {
+            Cuisines cuisines = null;
+            CuisinesRootObject cuisinesResponse = null;
+
+            cuisinesResponse = await webRequest.SelectCuisines(cityID, latitude, longitude, count);
+
+            if (cuisinesResponse?.Cuisines == null)
+                return cuisines;
+
+            cuisines = new Cuisines();
+
+            foreach (var cuisine in cuisinesResponse.Cuisines)
+                cuisines.Add(new Cuisine
+                {
+                    ID = cuisine.Cuisines.ID,
+                    Name = cuisine.Cuisines.Name
+                });
+
+            return cuisines;
         }
         #endregion
     }

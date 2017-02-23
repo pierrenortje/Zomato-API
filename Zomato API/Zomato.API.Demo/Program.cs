@@ -50,6 +50,8 @@ namespace Zomato.API.Demo
         #region Private Static Fields
         private static ZomatoService zomatoService = new ZomatoService();
 
+        private static string cityName = "Cape Town";
+
         private static double longitude = -33.9249;
         private static double latitude = 18.4241;
 
@@ -70,12 +72,15 @@ namespace Zomato.API.Demo
         {
             //await SelectCategories();
 
-            //await SelectCities("Cape Town");
-            //await SelectCities("Cape Town", 5);
+            //await SelectCities(cityName);
+            //await SelectCities(cityName, 5);
             //await SelectCities(longitude, latitude);
             //await SelectCities(cityIDs);
 
             //await SelectCollections(64);
+
+            await SelectCuisines(64);
+            await SelectCuisines(longitude, latitude);
         }
         #endregion
 
@@ -174,6 +179,36 @@ namespace Zomato.API.Demo
                 Console.WriteLine($"Url: {collection.Url}");
                 Console.WriteLine(new string('-', 10));
             }
+
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Cuisines
+        private static async Task SelectCuisines(int cityID, int? count = null)
+        {
+            var cuisines = await zomatoService.SelectCuisines(cityID, count);
+
+            PrintCuisinesResponse(cuisines, "Cuisines by city ID.");
+        }
+        private static async Task SelectCuisines(double latitude, double longitude, int? count = null)
+        {
+            var cuisines = await zomatoService.SelectCuisines(latitude, longitude, count);
+
+            PrintCuisinesResponse(cuisines, "Cuisines by latitude and longitude.");
+        }
+
+        private static void PrintCuisinesResponse(Cuisines cuisines, string customMessage)
+        {
+            if (cuisines == null)
+                throw new Exception("No cuisines found.");
+
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(customMessage);
+            Console.WriteLine(new string('=', 20));
+
+            foreach (var cuisine in cuisines)
+                Console.WriteLine($"ID: {cuisine.ID}.\tName: {cuisine.Name}.");
 
             Console.WriteLine("\n\n");
         }
