@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Zomato.API.Domain
 {
-    internal sealed class Restaurant
+    internal sealed class Restaurants
     {
         [JsonProperty("collection_id")]
         public int Collection_id { get; set; }
@@ -28,16 +28,16 @@ namespace Zomato.API.Domain
         public string Share_url { get; set; }
     }
 
-    internal sealed class Restaurants
+    internal sealed class RestaurantCollection
     {
         [JsonProperty("collection")]
-        public Restaurant Restaurant { get; set; }
+        public Restaurants Restaurants { get; set; }
     }
 
     internal sealed class CollectionRootObject
     {
         [JsonProperty("collections")]
-        public List<Restaurants> Restaurants { get; set; }
+        public List<RestaurantCollection> RestaurantCollection { get; set; }
 
         [JsonProperty("has_more")]
         public int Has_more { get; set; }

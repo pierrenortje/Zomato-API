@@ -85,14 +85,28 @@ namespace Zomato.API
             return citiesResponse;
         }
 
-        internal async Task<CollectionRootObject> SelectCollections(int queryText)
+        internal async Task<CollectionRootObject> SelectCollections(int? queryText, double? lat, double? lon, int? count)
         {
-
             CollectionRootObject collectionsResponse = null;
 
-            var parameters = new List<KeyValuePair<string, string>> {
-                new KeyValuePair<string, string>("city_id", queryText.ToString())
-            };
+            if (!lat.HasValue && lon.HasValue || lat.HasValue && !lon.HasValue) {
+                throw new Exception("You need to specify both the latitude and longitude.");
+            }
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            if(queryText.HasValue) {
+                parameters.Add(new KeyValuePair<string, string>("city_id", queryText.ToString()));
+            }
+
+            if(lat.HasValue && lon.HasValue) {
+                parameters.Add(new KeyValuePair<string, string>("lat", lat.Value.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("lon", lon.Value.ToString()));
+            }
+
+            if(count.HasValue) {
+                parameters.Add(new KeyValuePair<string, string>("count",count.ToString()));
+            }
 
             var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
 

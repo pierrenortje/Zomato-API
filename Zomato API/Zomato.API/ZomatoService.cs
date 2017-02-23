@@ -73,6 +73,29 @@ namespace Zomato.API
         {
             return await SelectCities(null, null, null, cityIDs, count);
         }
+
+        /// <summary>
+        /// Select a list of restaurants in a city
+        /// </summary>
+        /// <param name="queryText">City ID</param>
+        /// <param name="count">Amount of results</param>
+        /// <returns></returns>
+        public async Task<Collections> SelectCollections(int queryText, int? count = null)
+        {
+            return await SelectCollections(queryText, null, null, count);
+        }
+
+        /// <summary>
+        /// Select a list of restaurants in a city
+        /// </summary>
+        /// <param name="lat">The latitude</param>
+        /// <param name="lon">The longitude</param>
+        /// <param name="count">Amount of results</param>
+        /// <returns></returns>
+        public async Task<Collections> SelectCollections(double lat, double lon, int? count = null)
+        {
+            return await SelectCollections(null, lat, lon, count);
+        }
         #endregion
 
         #region Private Async Methods
@@ -111,24 +134,24 @@ namespace Zomato.API
         }
 
         /// <summary>
-        /// Get a list of restaurants in a city
+        /// Select a list of restaurants in a city
         /// </summary> 
         /// <returns>A list of collections of restaurants</returns>
-        public async Task<Collections> SelectCollections(int queryText)
+        private async Task<Collections> SelectCollections(int? queryText, double? lat, double? lon, int? count)
         {
             Collections collections = null;
             CollectionRootObject collectionResponse = null;
 
-            collectionResponse = await webRequest.SelectCollections(queryText);
+            collectionResponse = await webRequest.SelectCollections(queryText, lat, lon, count);
 
-            if(collectionResponse?.Restaurants == null) {
+            if(collectionResponse?.RestaurantCollection == null) {
                 return collections;
             }
 
             collections = new Collections();
 
-            foreach(var restaurant in collectionResponse.Restaurants) {
-                var entry = restaurant.Restaurant;
+            foreach(var restaurants in collectionResponse.RestaurantCollection) {
+                var entry = restaurants.Restaurants;
 
                 collections.Add(new Collection{
                     ID = entry.Collection_id,

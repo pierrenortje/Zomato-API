@@ -27,7 +27,7 @@ namespace Zomato.API.Demo
     ///     CommonController:
     ///         • GET /categories           [COMPLETED]
     ///         • GET /cities               [COMPLETED]
-    ///         • GET /collections          [TBC]
+    ///         • GET /collections          [COMPLETED]
     ///         • GET /cuisines             [TBC]
     ///         • GET /establishments       [TBC]
     ///         • GET /geocode              [TBC]
@@ -72,7 +72,7 @@ namespace Zomato.API.Demo
 
             await SelectCities("Cape Town");
 
-            await SelectCollections(64);
+            await SelectCollections(64,2);
 
             await SelectCities(longitude, latitude);
             await SelectCities(cityIDs);
@@ -139,12 +139,22 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Collections
-        private static async Task SelectCollections(int queryText)
+        private static async Task SelectCollections(int queryText, int? count = null)
         {
-            var collections = await zomatoService.SelectCollections(queryText);
+            var collections = await zomatoService.SelectCollections(queryText, count);
 
+            PrintCollectionResponse(collections,"Collection by city ID");
+        }
+
+        private static async Task SelectCollections(double lat, double lon, int? count = null)
+        {
+            var collections = await zomatoService.SelectCollections(lat, lon, count);
+        }
+        
+        private static void PrintCollectionResponse(Collections collections, string customMessage)
+        {
             if(collections == null) {
-                throw new Exception ("No collections found");
+                throw new Exception ("No collection found");
             }
 
             Console.WriteLine("Printing collections");
@@ -153,7 +163,9 @@ namespace Zomato.API.Demo
             foreach(var collection in collections) {
                 Console.WriteLine($"ID: {collection.ID.ToString()}. \tTitle: {collection.Title}.");
             }
-        }        
+
+            Console.WriteLine("\n\n");
+        }       
         #endregion
     }
 }
