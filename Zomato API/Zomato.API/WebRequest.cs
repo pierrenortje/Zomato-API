@@ -55,7 +55,7 @@ namespace Zomato.API
 
         internal async Task<CitiesRootObject> SelectCities(string queryText, double? latitude, double? longitude, int[] cityIDs, int? count)
         {
-            if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
+            if ((!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue))
                 throw new Exception("You need to specify both the latitude and longitude.");
 
             CitiesRootObject citiesResponse = null;
@@ -82,7 +82,7 @@ namespace Zomato.API
         {
             CollectionsRootObject collectionsResponse = null;
 
-            if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
+            if ((!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue))
                 throw new Exception("You need to specify both the latitude and longitude.");
 
             var parameters = new List<KeyValuePair<string, string>>();
@@ -101,7 +101,7 @@ namespace Zomato.API
         {
             CuisinesRootObject cuisinesRootObject = null;
 
-            if (!latitude.HasValue && longitude.HasValue || latitude.HasValue && !longitude.HasValue)
+            if ((!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue))
                 throw new Exception("You need to specify both the latitude and longitude.");
 
             var parameters = new List<KeyValuePair<string, string>>();
