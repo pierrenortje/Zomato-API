@@ -70,24 +70,24 @@ namespace Zomato.API.Demo
         #region Private Static Methods
         private static async void MainAsync()
         {
-            //await SelectCategories();
+            //await SelectCategoriesAsync();
 
-            //await SelectCities(cityName);
-            //await SelectCities(cityName, 5);
-            //await SelectCities(longitude, latitude);
-            //await SelectCities(cityIDs);
+            //await SelectCitiesAsync(cityName);
+            //await SelectCitiesAsync(cityName, 5);
+            //await SelectCitiesAsync(longitude, latitude);
+            //await SelectCitiesAsync(cityIDs);
 
-            //await SelectCollections(64);
+            //await SelectCollectionsAsync(64);
 
-            await SelectCuisines(64);
-            await SelectCuisines(longitude, latitude);
+            await SelectCuisinesAsync(64);
+            await SelectCuisinesAsync(longitude, latitude);
         }
         #endregion
 
         #region Categories
-        private static async Task SelectCategories()
+        private static async Task SelectCategoriesAsync()
         {
-            var categories = await zomatoService.SelectCategories();
+            var categories = await zomatoService.SelectCategoriesAsync();
 
             if (categories == null)
                 throw new Exception("No categories found.");
@@ -104,21 +104,21 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Cities
-        private static async Task SelectCities(string queryText, int? count = null)
+        private static async Task SelectCitiesAsync(string queryText, int? count = null)
         {
-            var cities = await zomatoService.SelectCities(queryText, count);
+            var cities = await zomatoService.SelectCitiesAsync(queryText, count);
 
             PrintCitiesResponse(cities, "Cities by name.");
         }
-        private static async Task SelectCities(int[] cityIDs, int? count = null)
+        private static async Task SelectCitiesAsync(int[] cityIDs, int? count = null)
         {
-            var cities = await zomatoService.SelectCities(cityIDs, count);
+            var cities = await zomatoService.SelectCitiesAsync(cityIDs, count);
 
             PrintCitiesResponse(cities, "Cities by city IDs.");
         }
-        private static async Task SelectCities(double latitude, double longitude, int? count = null)
+        private static async Task SelectCitiesAsync(double latitude, double longitude, int? count = null)
         {
-            var cities = await zomatoService.SelectCities(latitude, longitude, count);
+            var cities = await zomatoService.SelectCitiesAsync(latitude, longitude, count);
 
             PrintCitiesResponse(cities, "Cities by latitude and longitude.");
         }
@@ -143,15 +143,15 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Collections
-        private static async Task SelectCollections(int cityID, int? count = null)
+        private static async Task SelectCollectionsAsync(int cityID, int? count = null)
         {
-            var collections = await zomatoService.SelectCollections(cityID, count);
+            var collections = await zomatoService.SelectCollectionsAsync(cityID, count);
 
             PrintCollectionResponse(collections, "Collections by city ID.");
         }
-        private static async Task SelectCollections(double latitude, double longitude, int? count = null)
+        private static async Task SelectCollectionsAsync(double latitude, double longitude, int? count = null)
         {
-            var collections = await zomatoService.SelectCollections(latitude, longitude, count);
+            var collections = await zomatoService.SelectCollectionsAsync(latitude, longitude, count);
 
             PrintCollectionResponse(collections, "Collections by latitude and longitude.");
         }
@@ -185,15 +185,15 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Cuisines
-        private static async Task SelectCuisines(int cityID, int? count = null)
+        private static async Task SelectCuisinesAsync(int cityID, int? count = null)
         {
-            var cuisines = await zomatoService.SelectCuisines(cityID, count);
+            var cuisines = await zomatoService.SelectCuisinesAsync(cityID, count);
 
             PrintCuisinesResponse(cuisines, "Cuisines by city ID.");
         }
-        private static async Task SelectCuisines(double latitude, double longitude, int? count = null)
+        private static async Task SelectCuisinesAsync(double latitude, double longitude, int? count = null)
         {
-            var cuisines = await zomatoService.SelectCuisines(latitude, longitude, count);
+            var cuisines = await zomatoService.SelectCuisinesAsync(latitude, longitude, count);
 
             PrintCuisinesResponse(cuisines, "Cuisines by latitude and longitude.");
         }

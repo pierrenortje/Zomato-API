@@ -40,8 +40,25 @@ namespace Zomato.API
         }
         #endregion
 
+        #region Private Methods
+        private void AppendBaseParameters(ref List<KeyValuePair<string, string>> parameters, int? cityID, double? latitude, double? longitude, int? count)
+        {
+            if (latitude.HasValue && longitude.HasValue)
+            {
+                parameters.Add(new KeyValuePair<string, string>("lat", latitude.Value.ToString()));
+                parameters.Add(new KeyValuePair<string, string>("lon", longitude.Value.ToString()));
+            }
+
+            if (cityID.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("city_id", cityID.ToString()));
+
+            if (count.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
+        }
+        #endregion
+
         #region Internal Async Methods
-        internal async Task<CategoriesRootObject> SelectCategories()
+        internal async Task<CategoriesRootObject> SelectCategoriesAsync()
         {
             CategoriesRootObject categoriesResponse = null;
 
@@ -53,7 +70,7 @@ namespace Zomato.API
             return categoriesResponse;
         }
 
-        internal async Task<CitiesRootObject> SelectCities(string queryText, double? latitude, double? longitude, int[] cityIDs, int? count)
+        internal async Task<CitiesRootObject> SelectCitiesAsync(string queryText, double? latitude, double? longitude, int[] cityIDs, int? count)
         {
             if ((!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue))
                 throw new Exception("You need to specify both the latitude and longitude.");
@@ -78,7 +95,7 @@ namespace Zomato.API
             return citiesResponse;
         }
 
-        internal async Task<CollectionsRootObject> SelectCollections(int? cityID, double? latitude, double? longitude, int? count)
+        internal async Task<CollectionsRootObject> SelectCollectionsAsync(int? cityID, double? latitude, double? longitude, int? count)
         {
             CollectionsRootObject collectionsResponse = null;
 
@@ -97,7 +114,7 @@ namespace Zomato.API
             return collectionsResponse;
         }
 
-        internal async Task<CuisinesRootObject> SelectCuisines(int? cityID, double? latitude, double? longitude, int? count)
+        internal async Task<CuisinesRootObject> SelectCuisinesAsync(int? cityID, double? latitude, double? longitude, int? count)
         {
             CuisinesRootObject cuisinesRootObject = null;
 
@@ -114,23 +131,6 @@ namespace Zomato.API
                 cuisinesRootObject = JsonConvert.DeserializeObject<CuisinesRootObject>(response);
 
             return cuisinesRootObject;
-        }
-        #endregion
-
-        #region Private Methods
-        private void AppendBaseParameters(ref List<KeyValuePair<string, string>> parameters, int? cityID, double? latitude, double? longitude, int? count)
-        {
-            if (latitude.HasValue && longitude.HasValue)
-            {
-                parameters.Add(new KeyValuePair<string, string>("lat", latitude.Value.ToString()));
-                parameters.Add(new KeyValuePair<string, string>("lon", longitude.Value.ToString()));
-            }
-
-            if (cityID.HasValue)
-                parameters.Add(new KeyValuePair<string, string>("city_id", cityID.ToString()));
-
-            if (count.HasValue)
-                parameters.Add(new KeyValuePair<string, string>("count", count.ToString()));
         }
         #endregion
     }
