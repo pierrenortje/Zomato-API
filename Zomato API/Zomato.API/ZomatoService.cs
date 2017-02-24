@@ -140,6 +140,106 @@ namespace Zomato.API
         {
             return await SelectEstablishmentsAsync(null, latitude, longitude);
         }
+
+        /// <summary>
+        /// Get a restaurant by its ID. Partner Access is required to access photos and reviews.
+        /// </summary>
+        /// <param name="restaurantID">The restaurant's ID.</param>
+        /// <returns>A restaurant.</returns>
+        public async Task<Restaurant> GetRestaurantAsync(int restaurantID)
+        {
+            Restaurant restaurant = null;
+            RestaurantRootObject restaurantResponse = null;
+
+            restaurantResponse = await webRequest.GetRestaurantAsync(restaurantID);
+
+            if (restaurantResponse == null)
+                return restaurant;
+
+            #region Photos
+            var photos = new Photos();
+            if (restaurantResponse.Photos != null)
+                foreach (var photo in restaurantResponse.Photos)
+                    photos.Add(new Photo
+                    {
+                        ID = photo.ID,
+                        Url = photo.Url,
+                        ThumbUrl = photo.ThumbUrl,
+                        Caption = photo.Caption,
+                        Height = photo.Height,
+                        Width = photo.Width,
+                        Timestamp = photo.Timestamp,
+                        RestaurantID = photo.RestaurantID,
+                        TotalComments = photo.TotalComments,
+                        User = new User
+                        {
+                            Name = photo.User.Name,
+                            ProfileImageUrl = photo.User.ProfileImageUrl,
+                            ProfileUrl = photo.User.ProfileUrl,
+                            ZomatoHandle = photo.User.ZomatoHandle,
+                            FoodieLevel = photo.User.FoodieLevel,
+                            FoodieLevelNumber = photo.User.FoodieLevelNumber
+                        },
+                        LikesCount = photo.LikesCount
+                    });
+            #endregion
+
+            #region Reviews
+            var reviews = new Reviews();
+            if (restaurantResponse.Reviews != null)
+                foreach (var review in restaurantResponse.Reviews)
+                reviews.Add(new Review
+                {
+                    ID = review.ID,
+                    Likes = review.Likes,
+                    Rating = review.Rating,
+                    RatingText = review.RatingText,
+                    ReviewText = review.ReviewText,
+                    Timestamp = review.Timestamp,
+                    TotalComments = review.TotalComments,
+                    User = new User
+                    {
+                        Name = review.User.Name,
+                        ProfileImageUrl = review.User.ProfileImageUrl,
+                        ProfileUrl = review.User.ProfileUrl,
+                        ZomatoHandle = review.User.ZomatoHandle,
+                        FoodieLevel = review.User.FoodieLevel,
+                        FoodieLevelNumber = review.User.FoodieLevelNumber
+                    }
+                });
+            #endregion
+
+            #region Restaurant
+            restaurant = new Restaurant
+            {
+                ID = restaurantResponse.ID,
+                Name = restaurantResponse.Name,
+                Url = restaurantResponse.Url,
+                EventsUrl = restaurantResponse.EventsUrl,
+                MenuUrl = restaurantResponse.MenuUrl,
+                PhotosUrl = restaurantResponse.PhotosUrl,
+                ThumbUrl = restaurantResponse.ThumbUrl,
+                Cuisines = restaurantResponse.Cuisines,
+                PriceRange = restaurantResponse.PriceRange,
+                AverageCostForTwo = restaurantResponse.AverageCostForTwo,
+                FeaturedImageUrl = restaurantResponse.FeaturedImage,
+                PhoneNumbers = restaurantResponse.PhoneNumbers,
+                Location = new Location
+                {
+                    Address = restaurantResponse.Location.Address,
+                    City = restaurantResponse.Location.City,
+                    Latitude = restaurantResponse.Location.Latitude,
+                    Longitude = restaurantResponse.Location.Longitude,
+                    ZipCode = restaurantResponse.Location.ZipCode
+                },
+                Photos = photos,
+                TotalPhotos = restaurantResponse.TotalPhotos,
+                Reviews = reviews
+            };
+            #endregion
+
+            return restaurant;
+        }
         #endregion
 
         #region Private Async Methods

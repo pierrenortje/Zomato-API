@@ -68,6 +68,8 @@
     <Compile Include="Domain\CuisineResponse.cs" />
     <Compile Include="Domain\Establishment.cs" />
     <Compile Include="Domain\EstablishmentResponse.cs" />
+    <Compile Include="Domain\Restaurant.cs" />
+    <Compile Include="Domain\RestaurantResponse.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="WebRequest.cs" />
     <Compile Include="ZomatoService.cs" />

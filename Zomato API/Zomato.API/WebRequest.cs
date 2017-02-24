@@ -151,6 +151,20 @@ namespace Zomato.API
 
             return establishmentsRootObject;
         }
+
+        internal async Task<RestaurantRootObject> GetRestaurantAsync(int restaurantID)
+        {
+            RestaurantRootObject restaurantRootObject = null;
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            var response = await webRequest.Get(RestaurantAction.Get, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                restaurantRootObject = JsonConvert.DeserializeObject<RestaurantRootObject>(response);
+
+            return restaurantRootObject;
+        }
         #endregion
     }
 }

@@ -82,8 +82,10 @@ namespace Zomato.API.Demo
             //await SelectCuisinesAsync(64);
             //await SelectCuisinesAsync(longitude, latitude);
 
-            await SelectEstablishmentsAsync(64);
-            await SelectEstablishmentsAsync(longitude, latitude);
+            //await SelectEstablishmentsAsync(64);
+            //await SelectEstablishmentsAsync(longitude, latitude);
+
+            await GetRestaurantAsync(18361256);
         }
         #endregion
 
@@ -242,6 +244,87 @@ namespace Zomato.API.Demo
 
             foreach (var establishment in establishments)
                 Console.WriteLine($"ID: {establishment.ID}.\tName: {establishment.Name}.");
+
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Restaurant
+        private static async Task GetRestaurantAsync(int restaurantID)
+        {
+            var restaurant = await zomatoService.GetRestaurantAsync(restaurantID);
+
+            if (restaurant == null)
+                throw new Exception("No restaurant found.");
+
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine("Restaurant by ID.");
+            Console.WriteLine(new string('=', 20));
+
+            Console.WriteLine($"ID: {restaurant.ID}.");
+            Console.WriteLine($"Name: {restaurant.Name}.");
+            Console.WriteLine($"Url: {restaurant.Url}.");
+            Console.WriteLine($"Events Url: {restaurant.EventsUrl}.");
+            Console.WriteLine($"Menu Url: {restaurant.MenuUrl}.");
+            Console.WriteLine($"Photos Url: {restaurant.PhotosUrl}.");
+            Console.WriteLine($"Thumb Url: {restaurant.ThumbUrl}.");
+            Console.WriteLine($"Cuisines: {restaurant.Cuisines}.");
+            Console.WriteLine($"Price Range: {restaurant.PriceRange}.");
+            Console.WriteLine($"Average Cost For Two: {restaurant.AverageCostForTwo}.");
+            Console.WriteLine($"Featured Image Url: {restaurant.FeaturedImageUrl}.");
+            Console.WriteLine($"Phone Numbers: {restaurant.PhoneNumbers}.");
+
+            Console.WriteLine($"\t Location - Address: {restaurant.Location.Address}.");
+            Console.WriteLine($"\t Location - City: {restaurant.Location.City}.");
+            Console.WriteLine($"\t Location - Latitude: {restaurant.Location.Latitude}.");
+            Console.WriteLine($"\t Location - Longitude: {restaurant.Location.Longitude}.");
+            Console.WriteLine($"\t Location - Zip Code: {restaurant.Location.ZipCode}.");
+
+            #region Photos
+            if (restaurant.Photos != null && restaurant.Photos.Count > 0)
+                foreach (var photo in restaurant.Photos)
+                {
+                    Console.WriteLine($"\t\t Photo - ID: {photo.ID}.");
+                    Console.WriteLine($"\t\t Photo - Url: {photo.Url}.");
+                    Console.WriteLine($"\t\t Photo - Thumb Url: {photo.ThumbUrl}.");
+                    Console.WriteLine($"\t\t Photo - Caption: {photo.Caption}.");
+                    Console.WriteLine($"\t\t Photo - Height: {photo.Height}.");
+                    Console.WriteLine($"\t\t Photo - Width: {photo.Width}.");
+                    Console.WriteLine($"\t\t Photo - Timestamp: {photo.Timestamp}.");
+                    Console.WriteLine($"\t\t Photo - Restaurant ID: {photo.RestaurantID}.");
+                    Console.WriteLine($"\t\t Photo - Total Comments: {photo.TotalComments}.");
+
+                    Console.WriteLine($"\t\t User - Name: {photo.User.Name}.");
+                    Console.WriteLine($"\t\t User - Profile Image Url: {photo.User.ProfileImageUrl}.");
+                    Console.WriteLine($"\t\t User - Profile Url: {photo.User.ProfileUrl}.");
+                    Console.WriteLine($"\t\t User - Zomato Handle: {photo.User.ZomatoHandle}.");
+                    Console.WriteLine($"\t\t User - Foodie Level: {photo.User.FoodieLevel}.");
+                    Console.WriteLine($"\t\t User - Foodie Level Number: {photo.User.FoodieLevelNumber}.");
+                }
+            #endregion
+
+            Console.WriteLine($"TotalPhotos: {restaurant.TotalPhotos}.");
+
+            #region Reviews
+            if (restaurant.Reviews != null && restaurant.Reviews.Count > 0)
+                foreach (var review in restaurant.Reviews)
+                {
+                    Console.WriteLine($"\t\t Review - ID: {review.ID}.");
+                    Console.WriteLine($"\t\t Review - Likes: {review.Likes}.");
+                    Console.WriteLine($"\t\t Review - Rating: {review.Rating}.");
+                    Console.WriteLine($"\t\t Review - Rating Text: {review.RatingText}.");
+                    Console.WriteLine($"\t\t Review - Review Text: {review.ReviewText}.");
+                    Console.WriteLine($"\t\t Review - Timestamp: {review.Timestamp}.");
+                    Console.WriteLine($"\t\t Review - Total Comments: {review.TotalComments}.");
+
+                    Console.WriteLine($"\t\t User - Name: {review.User.Name}.");
+                    Console.WriteLine($"\t\t User - Profile Image Url: {review.User.ProfileImageUrl}.");
+                    Console.WriteLine($"\t\t User - Profile Url: {review.User.ProfileUrl}.");
+                    Console.WriteLine($"\t\t User - Zomato Handle: {review.User.ZomatoHandle}.");
+                    Console.WriteLine($"\t\t User - Foodie Level: {review.User.FoodieLevel}.");
+                    Console.WriteLine($"\t\t User - Foodie Level Number: {review.User.FoodieLevelNumber}.");
+                }
+            #endregion
 
             Console.WriteLine("\n\n");
         }
