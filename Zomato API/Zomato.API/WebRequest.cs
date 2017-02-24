@@ -158,12 +158,31 @@ namespace Zomato.API
 
             var parameters = new List<KeyValuePair<string, string>>();
 
+            parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
+
             var response = await webRequest.Get(RestaurantAction.Get, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 restaurantRootObject = JsonConvert.DeserializeObject<RestaurantRootObject>(response);
 
             return restaurantRootObject;
+        }
+
+        internal async Task<DailyMenuRootObject> GetDailyMenuAsync(int restaurantID)
+        {
+            DailyMenuRootObject dailyMenuRootObject = null;
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
+            string response = null;
+
+            response = await webRequest.Get(RestaurantAction.GetDailyMenu, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                dailyMenuRootObject = JsonConvert.DeserializeObject<DailyMenuRootObject>(response);
+
+            return dailyMenuRootObject;
         }
         #endregion
     }

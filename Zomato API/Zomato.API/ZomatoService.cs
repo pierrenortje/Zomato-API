@@ -188,25 +188,25 @@ namespace Zomato.API
             var reviews = new Reviews();
             if (restaurantResponse.Reviews != null)
                 foreach (var review in restaurantResponse.Reviews)
-                reviews.Add(new Review
-                {
-                    ID = review.ID,
-                    Likes = review.Likes,
-                    Rating = review.Rating,
-                    RatingText = review.RatingText,
-                    ReviewText = review.ReviewText,
-                    Timestamp = review.Timestamp,
-                    TotalComments = review.TotalComments,
-                    User = new User
+                    reviews.Add(new Review
                     {
-                        Name = review.User.Name,
-                        ProfileImageUrl = review.User.ProfileImageUrl,
-                        ProfileUrl = review.User.ProfileUrl,
-                        ZomatoHandle = review.User.ZomatoHandle,
-                        FoodieLevel = review.User.FoodieLevel,
-                        FoodieLevelNumber = review.User.FoodieLevelNumber
-                    }
-                });
+                        ID = review.ID,
+                        Likes = review.Likes,
+                        Rating = review.Rating,
+                        RatingText = review.RatingText,
+                        ReviewText = review.ReviewText,
+                        Timestamp = review.Timestamp,
+                        TotalComments = review.TotalComments,
+                        User = new User
+                        {
+                            Name = review.User.Name,
+                            ProfileImageUrl = review.User.ProfileImageUrl,
+                            ProfileUrl = review.User.ProfileUrl,
+                            ZomatoHandle = review.User.ZomatoHandle,
+                            FoodieLevel = review.User.FoodieLevel,
+                            FoodieLevelNumber = review.User.FoodieLevelNumber
+                        }
+                    });
             #endregion
 
             #region Restaurant
@@ -239,6 +239,47 @@ namespace Zomato.API
             #endregion
 
             return restaurant;
+        }
+
+        /// <summary>
+        /// Get the daily menu by restaurant ID.
+        /// </summary>
+        /// <param name="restaurantID">The restaurant's ID.</param>
+        /// <returns>The daily menu.</returns>
+        public async Task<DailyMenus> GetDailyMenuAsync(int restaurantID)
+        {
+            DailyMenus dailyMenus = null;
+            DailyMenuRootObject dailyMenuResponse = null;
+
+            dailyMenuResponse = await webRequest.GetDailyMenuAsync(restaurantID);
+
+            if (dailyMenuResponse == null)
+                return dailyMenus;
+
+            dailyMenus = new DailyMenus();
+
+            foreach (var dailyMenu in dailyMenuResponse.DailyMenus)
+            {
+                var dailyMenuItem = new DailyMenu
+                {
+                    ID = dailyMenu.ID,
+                    Name = dailyMenu.Name,
+                    StartDate = dailyMenu.StartDate,
+                    EndDate = dailyMenu.EndDate
+                };
+
+                foreach (var dish in dailyMenu.Dishes)
+                    dailyMenuItem.Dishes.Add(new Dish
+                    {
+                        ID = dish.ID,
+                        Name = dish.Name,
+                        Price = dish.Price
+                    });
+
+                dailyMenus.Add(dailyMenuItem);
+            }
+
+            return dailyMenus;
         }
         #endregion
 

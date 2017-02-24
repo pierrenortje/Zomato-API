@@ -37,8 +37,8 @@ namespace Zomato.API.Demo
     ///         • GET /locations            [TBC]
     ///         
     ///     RestaurantController:
-    ///         • GET /dailymenu            [TBC]
-    ///         • GET /restaurant           [TBC]
+    ///         • GET /dailymenu            [COMPLETED]
+    ///         • GET /restaurant           [COMPLETED]
     ///         • GET /reviews              [TBC]
     ///         • GET /search               [TBC]
     ///         
@@ -70,22 +70,33 @@ namespace Zomato.API.Demo
         #region Private Static Methods
         private static async void MainAsync()
         {
-            //await SelectCategoriesAsync();
+            try
+            {
+                //await SelectCategoriesAsync();
 
-            //await SelectCitiesAsync(cityName);
-            //await SelectCitiesAsync(cityName, 5);
-            //await SelectCitiesAsync(longitude, latitude);
-            //await SelectCitiesAsync(cityIDs);
+                //await SelectCitiesAsync(cityName);
+                //await SelectCitiesAsync(cityName, 5);
+                //await SelectCitiesAsync(longitude, latitude);
+                //await SelectCitiesAsync(cityIDs);
 
-            //await SelectCollectionsAsync(64);
+                //await SelectCollectionsAsync(64);
 
-            //await SelectCuisinesAsync(64);
-            //await SelectCuisinesAsync(longitude, latitude);
+                //await SelectCuisinesAsync(64);
+                //await SelectCuisinesAsync(longitude, latitude);
 
-            //await SelectEstablishmentsAsync(64);
-            //await SelectEstablishmentsAsync(longitude, latitude);
+                //await SelectEstablishmentsAsync(64);
+                //await SelectEstablishmentsAsync(longitude, latitude);
 
-            await GetRestaurantAsync(18361256);
+                //await GetRestaurantAsync(18361256);
+
+                await GetDailyMenuAsync(18361256);
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Error: {ex.Message}");
+                Console.ReadLine();
+            }
         }
         #endregion
 
@@ -325,6 +336,37 @@ namespace Zomato.API.Demo
                     Console.WriteLine($"\t\t User - Foodie Level Number: {review.User.FoodieLevelNumber}.");
                 }
             #endregion
+
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Daily Menu
+        private static async Task GetDailyMenuAsync(int restaurantID)
+        {
+            var dailyMenus = await zomatoService.GetDailyMenuAsync(restaurantID);
+
+            if (dailyMenus == null)
+                throw new Exception("No daily menu found.");
+
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine("Daily menu by restaurant ID.");
+            Console.WriteLine(new string('=', 20));
+
+            foreach (var dailyMenu in dailyMenus)
+            {
+                Console.WriteLine($"ID: {dailyMenu.ID}.");
+                Console.WriteLine($"Name: {dailyMenu.Name}.");
+                Console.WriteLine($"Start Date: {dailyMenu.StartDate}.");
+                Console.WriteLine($"End Date: {dailyMenu.EndDate}.");
+
+                foreach (var dish in dailyMenu.Dishes)
+                {
+                    Console.WriteLine($"\t Dish - ID: {dish.ID}.");
+                    Console.WriteLine($"\t Dish - Name: {dish.Name}.");
+                    Console.WriteLine($"\t Dish - Price: {dish.Price}.");
+                }
+            }
 
             Console.WriteLine("\n\n");
         }
