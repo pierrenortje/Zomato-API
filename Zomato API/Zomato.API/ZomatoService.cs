@@ -118,6 +118,28 @@ namespace Zomato.API
         {
             return await SelectCuisinesAsync(null, latitude, longitude, count);
         }
+
+        /// <summary>
+        /// Select a list of establishments in a city.
+        /// </summary>
+        /// <param name="cityID">The city's ID.</param>
+        /// <param name="count">Max results to return.</param>
+        /// <returns>A list of establishments.</returns>
+        public async Task<Establishments> SelectEstablishmentsAsync(int cityID)
+        {
+            return await SelectEstablishmentsAsync(cityID, null, null);
+        }
+        /// <summary>
+        /// Select a list of establishments by latitude and longitude.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="count">Max results to return.</param>
+        /// <returns>A list of establishments.</returns>
+        public async Task<Establishments> SelectEstablishmentsAsync(double latitude, double longitude)
+        {
+            return await SelectEstablishmentsAsync(null, latitude, longitude);
+        }
         #endregion
 
         #region Private Async Methods
@@ -200,6 +222,28 @@ namespace Zomato.API
                 });
 
             return cuisines;
+        }
+
+        private async Task<Establishments> SelectEstablishmentsAsync(int? cityID, double? latitude, double? longitude)
+        {
+            Establishments establishments = null;
+            EstablishmentsRootObject establishmentsResponse = null;
+
+            establishmentsResponse = await webRequest.SelectEstablishmentsAsync(cityID, latitude, longitude);
+
+            if (establishmentsResponse?.Establishments == null)
+                return establishments;
+
+            establishments = new Establishments();
+
+            foreach (var establishment in establishmentsResponse.Establishments)
+                establishments.Add(new Establishment
+                {
+                    ID = establishment.Establishments.ID,
+                    Name = establishment.Establishments.Name
+                });
+
+            return establishments;
         }
         #endregion
     }

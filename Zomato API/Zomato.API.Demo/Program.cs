@@ -79,8 +79,11 @@ namespace Zomato.API.Demo
 
             //await SelectCollectionsAsync(64);
 
-            await SelectCuisinesAsync(64);
-            await SelectCuisinesAsync(longitude, latitude);
+            //await SelectCuisinesAsync(64);
+            //await SelectCuisinesAsync(longitude, latitude);
+
+            await SelectEstablishmentsAsync(64);
+            await SelectEstablishmentsAsync(longitude, latitude);
         }
         #endregion
 
@@ -209,6 +212,36 @@ namespace Zomato.API.Demo
 
             foreach (var cuisine in cuisines)
                 Console.WriteLine($"ID: {cuisine.ID}.\tName: {cuisine.Name}.");
+
+            Console.WriteLine("\n\n");
+        }
+        #endregion
+
+        #region Establishments
+        private static async Task SelectEstablishmentsAsync(int cityID)
+        {
+            var establishments = await zomatoService.SelectEstablishmentsAsync(cityID);
+
+            PrintEstablishmentsResponse(establishments, "Establishments by city ID.");
+        }
+        private static async Task SelectEstablishmentsAsync(double latitude, double longitude)
+        {
+            var establishments = await zomatoService.SelectEstablishmentsAsync(latitude, longitude);
+
+            PrintEstablishmentsResponse(establishments, "Establishments by latitude and longitude.");
+        }
+
+        private static void PrintEstablishmentsResponse(Establishments establishments, string customMessage)
+        {
+            if (establishments == null)
+                throw new Exception("No establishments found.");
+
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(customMessage);
+            Console.WriteLine(new string('=', 20));
+
+            foreach (var establishment in establishments)
+                Console.WriteLine($"ID: {establishment.ID}.\tName: {establishment.Name}.");
 
             Console.WriteLine("\n\n");
         }

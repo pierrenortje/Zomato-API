@@ -132,6 +132,25 @@ namespace Zomato.API
 
             return cuisinesRootObject;
         }
+
+        internal async Task<EstablishmentsRootObject> SelectEstablishmentsAsync(int? cityID, double? latitude, double? longitude)
+        {
+            EstablishmentsRootObject establishmentsRootObject = null;
+
+            if ((!latitude.HasValue && longitude.HasValue) || (latitude.HasValue && !longitude.HasValue))
+                throw new Exception("You need to specify both the latitude and longitude.");
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            AppendBaseParameters(ref parameters, cityID, latitude, longitude, null);
+
+            var response = await webRequest.Get(CommonAction.SelectEstablishments, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                establishmentsRootObject = JsonConvert.DeserializeObject<EstablishmentsRootObject>(response);
+
+            return establishmentsRootObject;
+        }
         #endregion
     }
 }
