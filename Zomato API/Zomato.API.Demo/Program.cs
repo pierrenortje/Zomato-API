@@ -79,8 +79,10 @@ namespace Zomato.API.Demo
 
             //await SelectCollectionsAsync(64);
 
-            await SelectCuisinesAsync(64);
-            await SelectCuisinesAsync(longitude, latitude);
+            //await SelectCuisinesAsync(64);
+            //await SelectCuisinesAsync(longitude, latitude);
+
+            await SelectGeocodeAsync(40.7, -73.9);
         }
         #endregion
 
@@ -215,7 +217,50 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Geocode
+        private static async Task SelectGeocodeAsync(double latitude, double longitude)
+        {
+            var geocode = await zomatoService.SelectGeocodeAsync(latitude, longitude);
 
+            PrintGeocodeResponse(geocode, "Popular Food & Nightlife Index around a location");
+        }
+
+        private static void PrintGeocodeResponse(Geocode geocode, string customMessage)
+        {
+            if(geocode == null)
+                throw new Exception("No 'Geocode' information found");
+            
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine(customMessage);
+            Console.WriteLine(new string('=', 20));
+
+            Console.WriteLine("Title: "+geocode.region.title);
+            Console.WriteLine(geocode.region.cityName+", "+geocode.region.countryName);
+            Console.WriteLine("Popularity:\t"+geocode.popularity.popularity);
+            Console.WriteLine("Nightlife Index:\t"+geocode.popularity.nightlifeIndex);
+            Console.WriteLine("Top cuisines:\t"+string.Join(", ",geocode.popularity.topCuisines.ToArray()));
+            Console.WriteLine("link: "+geocode.link);
+            Console.WriteLine(new string ('-',10));
+            Console.WriteLine("Nearby restaurants");
+            Console.WriteLine(new string ('-',10));
+
+            foreach(var restaurant in geocode.nearbyRestaurantList) {
+                Console.WriteLine(new string ('-',10));
+                Console.WriteLine("Name:\t\t" + restaurant.name);
+                Console.WriteLine("Cuisines:\t" + restaurant.cuisines);
+                Console.WriteLine(
+                        "Rating:\t\t" + restaurant.userRating.aggregateRating    + 
+                        " / " + restaurant.userRating.ratingText                 +
+                        " / out of " + restaurant.userRating.votes               + " votes"
+                        );
+                Console.WriteLine("Avg cost for 2:\t" + restaurant.currency + restaurant.averageCostForTwo);
+                Console.WriteLine("Switch to order:\t" + (restaurant.switchToOrderMenu == 1 ? "yes" : "no"));
+                Console.WriteLine("Online delivery:\t" + (restaurant.hasOnlineDelivery == 1 ? "yes" : "no"));
+                Console.WriteLine("Delivering now:\t" + (restaurant.isDeliveringNow == 1 ? "yes" : "no"));
+                Console.WriteLine("Table booking:\t" + (restaurant.hasTableBooking == 1 ? "yes" : "no"));
+                Console.WriteLine("Address:\t" + restaurant.area.address);
+                Console.WriteLine(new string ('-',10)+"\n");
+            }
+        }
         #endregion
     }
 }

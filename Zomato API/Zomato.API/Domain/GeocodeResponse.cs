@@ -1,99 +1,210 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Zomato.API.Domain
 {
-    public class Area
+    public sealed class Region
     {
-        public string entity_type { get; set; }
-        public int entity_id { get; set; }
+        [JsonProperty("entity_type")]
+        internal string entityType { get; set; }
+
+        [JsonProperty("entity_id")]
+        internal int entityID { get; set; }
+
+        [JsonProperty("title")]
         public string title { get; set; }
-        public string latitude { get; set; }
-        public string longitude { get; set; }
-        public int city_id { get; set; }
-        public string city_name { get; set; }
-        public int country_id { get; set; }
-        public string country_name { get; set; }
+
+        [JsonProperty("latitude")]
+        internal string latitude { get; set; }
+
+        [JsonProperty("longitude")]
+        internal string longitude { get; set; }
+
+        [JsonProperty("city_id")]
+        internal int cityID { get; set; }
+
+        [JsonProperty("city_name")]
+        public string cityName { get; set; }
+
+        [JsonProperty("country_id")]
+        internal int countryID { get; set; }
+
+        [JsonProperty("country_name")]
+        public string countryName { get; set; }
     }
 
-    public class Popularity
+    public sealed class Popularity
     {
+
+        [JsonProperty("popularity")]
         public string popularity { get; set; }
-        public string nightlife_index { get; set; }
-        public List<string> nearby_res { get; set; }
-        public List<string> top_cuisines { get; set; }
-        public string popularity_res { get; set; }
-        public string nightlife_res { get; set; }
-        public string subzone { get; set; }
-        public int subzone_id { get; set; }
-        public string city { get; set; }
+
+        [JsonProperty("nightlife_index")]
+        public string nightlifeIndex { get; set; }
+
+        /// <summary>
+        /// List of nearby restaurants' IDs
+        /// </summary>
+        [JsonProperty("nearby_res")]
+        internal List<string> nearbyResIDs { get; set; }
+
+        [JsonProperty("top_cuisines")]
+        public List<string> topCuisines { get; set; }
+
+        [JsonProperty("popularity_res")]
+        internal string popularityRes { get; set; }
+
+        [JsonProperty("nightlife_res")]
+        internal string nightlifeRes { get; set; }
+
+        [JsonProperty("subzone")]
+        internal string subzone { get; set; }
+
+        [JsonProperty("subzone_id")]
+        internal int subzoneID { get; set; }
+
+        [JsonProperty("city")]
+        internal string city { get; set; }
     }
 
-    public class R
+    internal sealed class R
     {
-        public int res_id { get; set; }
+        [JsonProperty("res_id")]
+        internal int resID { get; set; }
     }
 
-    public class Location2
+    public sealed class Area
     {
+        [JsonProperty("address")]
         public string address { get; set; }
-        public string locality { get; set; }
-        public string city { get; set; }
-        public int city_id { get; set; }
-        public string latitude { get; set; }
-        public string longitude { get; set; }
-        public string zipcode { get; set; }
-        public int country_id { get; set; }
-        public string locality_verbose { get; set; }
+
+        [JsonProperty("locality")]
+        internal string locality { get; set; }
+
+        [JsonProperty("city")]
+        internal string city { get; set; }
+
+        [JsonProperty("city_id")]
+        internal int cityID { get; set; }
+
+        [JsonProperty("latitude")]
+        internal string latitude { get; set; }
+
+        [JsonProperty("longitude")]
+        internal string longitude { get; set; }
+
+        [JsonProperty("zipcode")]
+        internal string zipcode { get; set; }
+
+        [JsonProperty("country_id")]
+        internal int countryID { get; set; }
+
+        [JsonProperty("locality_verbose")]
+        internal string localityVerbose { get; set; }
     }
 
-    public class UserRating
+    public sealed class UserRating
     {
-        public string aggregate_rating { get; set; }
-        public string rating_text { get; set; }
-        public string rating_color { get; set; }
+        [JsonProperty("aggregate_rating")]
+        public string aggregateRating { get; set; }
+
+        [JsonProperty("rating_text")]
+        public string ratingText { get; set; }
+
+        [JsonProperty("rating_color")]
+        public string ratingColor { get; set; }
+
+        [JsonProperty("votes")]
         public string votes { get; set; }
     }
 
-    public class Restaurant
+    public sealed class Restaurant
     {
-        public R R { get; set; }
-        public string apikey { get; set; }
-        public string id { get; set; }
+        [JsonProperty("R")]
+        internal R R { get; set; }
+
+        [JsonProperty("apikey")]
+        internal string apikey { get; set; }
+
+        [JsonProperty("id")]
+        internal string ID { get; set; }
+
+        [JsonProperty("name")]
         public string name { get; set; }
+
+        [JsonProperty("url")]
         public string url { get; set; }
-        public Location2 location { get; set; }
-        public int switch_to_order_menu { get; set; }
+
+        [JsonProperty("location")]
+        public Area area { get; set; }
+
+        [JsonProperty("switch_to_order_menu")]
+        public int switchToOrderMenu { get; set; }
+
+        [JsonProperty("cuisines")]
         public string cuisines { get; set; }
-        public int average_cost_for_two { get; set; }
-        public int price_range { get; set; }
+
+        [JsonProperty("average_cost_for_two")]
+        public int averageCostForTwo { get; set; }
+
+        [JsonProperty("price_range")]
+        public int priceRange { get; set; }
+
+        [JsonProperty("currency")]
         public string currency { get; set; }
+
+        [JsonProperty("offers")]
         public List<object> offers { get; set; }
-        public string thumb { get; set; }
-        public UserRating user_rating { get; set; }
-        public string photos_url { get; set; }
-        public string menu_url { get; set; }
-        public string featured_image { get; set; }
-        public int has_online_delivery { get; set; }
-        public int is_delivering_now { get; set; }
-        public string deeplink { get; set; }
-        public int has_table_booking { get; set; }
-        public string events_url { get; set; }
+
+        [JsonProperty("thumb")]
+        internal string thumb { get; set; }
+
+        [JsonProperty("user_rating")]
+        public UserRating userRating { get; set; }
+
+        [JsonProperty("photos_url")]
+        public string photosUrl { get; set; }
+
+        [JsonProperty("menu_url")]
+        public string menuUrl { get; set; }
+
+        [JsonProperty("featured_image")]
+        public string featuredImage { get; set; }
+
+        [JsonProperty("has_online_delivery")]
+        public int hasOnlineDelivery { get; set; }
+
+        [JsonProperty("is_delivering_now")]
+        public int isDeliveringNow { get; set; }
+
+        [JsonProperty("deeplink")]
+        internal string deeplink { get; set; }
+
+        [JsonProperty("has_table_booking")]
+        public int hasTableBooking { get; set; }
+
+        [JsonProperty("events_url")]
+        public string eventsUrl { get; set; }
     }
 
-    public class NearbyRestaurant
+    public sealed class NearbyRestaurants
     {
+        [JsonProperty("restaurant")]
         public Restaurant restaurant { get; set; }
     }
 
-    public class GeocodeRootObject
+    internal sealed class GeocodeRootObject
     {
-        public Area area { get; set; }
-        public Popularity popularity { get; set; }
-        public string link { get; set; }
-        public List<NearbyRestaurant> nearby_restaurants { get; set; }
+        [JsonProperty("location")]
+        internal Region region { get; set; }
+
+        [JsonProperty("popularity")]
+        internal Popularity popularity { get; set; }
+
+        [JsonProperty("link")]
+        internal string link { get; set; }
+
+        [JsonProperty("nearby_restaurants")]
+        internal List<NearbyRestaurants> nearbyRestaurants { get; set; }
     }
 }

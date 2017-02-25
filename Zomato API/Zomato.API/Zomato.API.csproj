@@ -66,6 +66,8 @@
     <Compile Include="Domain\Country.cs" />
     <Compile Include="Domain\Cuisine.cs" />
     <Compile Include="Domain\CuisineResponse.cs" />
+    <Compile Include="Domain\Geocode.cs" />
+    <Compile Include="Domain\GeocodeResponse.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="WebRequest.cs" />
     <Compile Include="ZomatoService.cs" />
