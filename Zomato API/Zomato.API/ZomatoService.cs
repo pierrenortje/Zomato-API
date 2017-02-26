@@ -209,6 +209,18 @@ namespace Zomato.API
                     });
             #endregion
 
+        /// <summary>
+        /// Get a food & nightlife index of given coordinates
+        /// </summary>
+        /// <param name="latitude">The latitude</param>
+        /// <param name="longitude">The longitude</param>
+        /// <returns></returns>
+        public async Task<Geocode> SelectGeocodeAsync(double latitude, double longitude)
+        {
+            return await SelectGeocodeAsync(null, latitude, longitude, null);
+        }
+        #endregion
+
             #region Restaurant
             restaurant = new Restaurant
             {
@@ -363,6 +375,38 @@ namespace Zomato.API
                 });
 
             return cuisines;
+        }
+
+        private async Task<Geocode> SelectGeocodeAsync(int? cityID, double? latitude, double? longitude, int? count)
+        {
+            Geocode geocode = null;
+            GeocodeRootObject geocodeResponse = null;
+
+            geocodeResponse = await webRequest.SelectGeocodeAsync(latitude, longitude);
+
+            if(geocodeResponse == null)
+                return geocode;
+
+            geocode = new Geocode();
+
+            geocode.region = geocodeResponse.region;
+            geocode.popularity = geocodeResponse.popularity;
+            geocode.link = geocodeResponse.link;
+
+            geocode.entityType = geocodeResponse.region.entityType;
+            geocode.entityID = geocodeResponse.region.entityID;
+            geocode.cityID = geocodeResponse.region.cityID;
+            geocode.countryID = geocodeResponse.region.countryID;
+            geocode.subZoneID = geocodeResponse.popularity.subzoneID;
+
+            geocode.nearbyRestaurantList = new NearbyRestaurantList();
+
+            foreach(var restaurant in geocodeResponse.nearbyRestaurants) {
+                geocode.nearbyRestaurantList.Add(restaurant.restaurant);   
+                geocode.nearbyResIDs.Add(restaurant.restaurant.ID);             
+            }
+
+            return geocode;
         }
 
         private async Task<Establishments> SelectEstablishmentsAsync(int? cityID, double? latitude, double? longitude)
