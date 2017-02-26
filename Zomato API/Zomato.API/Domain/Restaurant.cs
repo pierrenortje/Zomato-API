@@ -17,7 +17,7 @@ namespace Zomato.API.Domain
         public string Cuisines { get; set; }
         public string TotalPhotos { get; set; }
         public string PhoneNumbers { get; set; }
-        public Location Location { get; set; }
+        public RestaurantLocation Location { get; set; }
         public Reviews Reviews { get; set; }
         public Photos Photos { get; set; }
     }
@@ -50,15 +50,6 @@ namespace Zomato.API.Domain
         public User User { get; set; }
     }
     public sealed class Reviews : List<Review> { }
-
-    public sealed class Location
-    {
-        public string Address { get; set; }
-        public string City { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
-        public string ZipCode { get; set; }
-    }
 
     public sealed class User
     {

@@ -89,7 +89,9 @@ namespace Zomato.API.Demo
 
                 //await GetRestaurantAsync(18361256);
 
-                await GetDailyMenuAsync(18361256);
+                //await GetDailyMenuAsync(18361256);
+
+                await SelectGeocodeAsync(40.7, -73.9);
             }
             catch (Exception ex)
             {
@@ -97,11 +99,6 @@ namespace Zomato.API.Demo
                 Console.WriteLine($"Error: {ex.Message}");
                 Console.ReadLine();
             }
-        }
-            //await SelectCuisinesAsync(64);
-            //await SelectCuisinesAsync(longitude, latitude);
-
-            await SelectGeocodeAsync(40.7, -73.9);
         }
         #endregion
 
@@ -291,7 +288,7 @@ namespace Zomato.API.Demo
             Console.WriteLine($"Phone Numbers: {restaurant.PhoneNumbers}.");
 
             Console.WriteLine($"\t Location - Address: {restaurant.Location.Address}.");
-            Console.WriteLine($"\t Location - City: {restaurant.Location.City}.");
+            Console.WriteLine($"\t Location - City: {restaurant.Location.CityName}.");
             Console.WriteLine($"\t Location - Latitude: {restaurant.Location.Latitude}.");
             Console.WriteLine($"\t Location - Longitude: {restaurant.Location.Longitude}.");
             Console.WriteLine($"\t Location - Zip Code: {restaurant.Location.ZipCode}.");
@@ -382,45 +379,99 @@ namespace Zomato.API.Demo
         {
             var geocode = await zomatoService.SelectGeocodeAsync(latitude, longitude);
 
-            PrintGeocodeResponse(geocode, "Popular Food & Nightlife Index around a location");
-        }
+            if (geocode == null)
+                throw new Exception("No geocode information found.");
 
-        private static void PrintGeocodeResponse(Geocode geocode, string customMessage)
-        {
-            if(geocode == null)
-                throw new Exception("No 'Geocode' information found");
-            
             Console.WriteLine(new string('=', 20));
-            Console.WriteLine(customMessage);
+            Console.WriteLine("Popular Food & Nightlife Index around a location.");
             Console.WriteLine(new string('=', 20));
 
-            Console.WriteLine("Title: "+geocode.region.title);
-            Console.WriteLine(geocode.region.cityName+", "+geocode.region.countryName);
-            Console.WriteLine("Popularity:\t"+geocode.popularity.popularity);
-            Console.WriteLine("Nightlife Index:\t"+geocode.popularity.nightlifeIndex);
-            Console.WriteLine("Top cuisines:\t"+string.Join(", ",geocode.popularity.topCuisines.ToArray()));
-            Console.WriteLine("link: "+geocode.link);
-            Console.WriteLine(new string ('-',10));
-            Console.WriteLine("Nearby restaurants");
-            Console.WriteLine(new string ('-',10));
+            Console.WriteLine($"Link: " + geocode.Link);
+            Console.WriteLine($"\t\t Popularity - Country ID: " + geocode.Popularity.City?.Country?.ID);
+            Console.WriteLine($"\t\t Popularity - Country Name: " + geocode.Popularity.City?.Country?.Name);
 
-            foreach(var restaurant in geocode.nearbyRestaurantList) {
-                Console.WriteLine(new string ('-',10));
-                Console.WriteLine("Name:\t\t" + restaurant.name);
-                Console.WriteLine("Cuisines:\t" + restaurant.cuisines);
-                Console.WriteLine(
-                        "Rating:\t\t" + restaurant.userRating.aggregateRating    + 
-                        " / " + restaurant.userRating.ratingText                 +
-                        " / out of " + restaurant.userRating.votes               + " votes"
-                        );
-                Console.WriteLine("Avg cost for 2:\t" + restaurant.currency + restaurant.averageCostForTwo);
-                Console.WriteLine("Switch to order:\t" + (restaurant.switchToOrderMenu == 1 ? "yes" : "no"));
-                Console.WriteLine("Online delivery:\t" + (restaurant.hasOnlineDelivery == 1 ? "yes" : "no"));
-                Console.WriteLine("Delivering now:\t" + (restaurant.isDeliveringNow == 1 ? "yes" : "no"));
-                Console.WriteLine("Table booking:\t" + (restaurant.hasTableBooking == 1 ? "yes" : "no"));
-                Console.WriteLine("Address:\t" + restaurant.area.address);
-                Console.WriteLine(new string ('-',10)+"\n");
+            Console.WriteLine($"\t\t Popularity - City ID: " + geocode.Popularity.City.ID);
+            Console.WriteLine($"\t\t Popularity - City Name: " + geocode.Popularity.City.Name);
+
+            Console.WriteLine($"\t\t Popularity - Nearby Restaurant IDs: " + geocode.Popularity.NearbyRestaurantIDs);
+            Console.WriteLine($"\t\t Popularity - Nightlife Index: " + geocode.Popularity.NightlifeIndex);
+            Console.WriteLine($"\t\t Popularity - Nightlife Restaurants: " + geocode.Popularity.NightlifeRestaurants);
+            Console.WriteLine($"\t\t Popularity - PopularityRating: " + geocode.Popularity.PopularityRating);
+            Console.WriteLine($"\t\t Popularity - SubZone ID: " + geocode.Popularity.SubZone.ID);
+            Console.WriteLine($"\t\t Popularity - SubZone Name: " + geocode.Popularity.SubZone.Name);
+
+            Console.WriteLine($"\t\t Popularity - Top Cuisines: " + geocode.Popularity.TopCuisines);
+            Console.WriteLine($"\t\t Popularity - Total Popularity Restaurants: " + geocode.Popularity.TotalPopularityRestaurants);
+
+            #region Nearby Restaurants
+            foreach (var restaurant in geocode.NearbyRestaurantList)
+            {
+                Console.WriteLine($"ID: {restaurant.ID}.");
+                Console.WriteLine($"Name: {restaurant.Name}.");
+                Console.WriteLine($"Url: {restaurant.Url}.");
+                Console.WriteLine($"Events Url: {restaurant.EventsUrl}.");
+                Console.WriteLine($"Menu Url: {restaurant.MenuUrl}.");
+                Console.WriteLine($"Photos Url: {restaurant.PhotosUrl}.");
+                Console.WriteLine($"Thumb Url: {restaurant.ThumbUrl}.");
+                Console.WriteLine($"Cuisines: {restaurant.Cuisines}.");
+                Console.WriteLine($"Price Range: {restaurant.PriceRange}.");
+                Console.WriteLine($"Average Cost For Two: {restaurant.AverageCostForTwo}.");
+                Console.WriteLine($"Featured Image Url: {restaurant.FeaturedImageUrl}.");
+                Console.WriteLine($"Phone Numbers: {restaurant.PhoneNumbers}.");
+
+                Console.WriteLine($"\t Location - Address: {restaurant.Location.Address}.");
+                Console.WriteLine($"\t Location - City: {restaurant.Location.CityName}.");
+                Console.WriteLine($"\t Location - Latitude: {restaurant.Location.Latitude}.");
+                Console.WriteLine($"\t Location - Longitude: {restaurant.Location.Longitude}.");
+                Console.WriteLine($"\t Location - Zip Code: {restaurant.Location.ZipCode}.");
+
+                #region Photos
+                if (restaurant.Photos != null && restaurant.Photos.Count > 0)
+                    foreach (var photo in restaurant.Photos)
+                    {
+                        Console.WriteLine($"\t\t Photo - ID: {photo.ID}.");
+                        Console.WriteLine($"\t\t Photo - Url: {photo.Url}.");
+                        Console.WriteLine($"\t\t Photo - Thumb Url: {photo.ThumbUrl}.");
+                        Console.WriteLine($"\t\t Photo - Caption: {photo.Caption}.");
+                        Console.WriteLine($"\t\t Photo - Height: {photo.Height}.");
+                        Console.WriteLine($"\t\t Photo - Width: {photo.Width}.");
+                        Console.WriteLine($"\t\t Photo - Timestamp: {photo.Timestamp}.");
+                        Console.WriteLine($"\t\t Photo - Restaurant ID: {photo.RestaurantID}.");
+                        Console.WriteLine($"\t\t Photo - Total Comments: {photo.TotalComments}.");
+
+                        Console.WriteLine($"\t\t User - Name: {photo.User.Name}.");
+                        Console.WriteLine($"\t\t User - Profile Image Url: {photo.User.ProfileImageUrl}.");
+                        Console.WriteLine($"\t\t User - Profile Url: {photo.User.ProfileUrl}.");
+                        Console.WriteLine($"\t\t User - Zomato Handle: {photo.User.ZomatoHandle}.");
+                        Console.WriteLine($"\t\t User - Foodie Level: {photo.User.FoodieLevel}.");
+                        Console.WriteLine($"\t\t User - Foodie Level Number: {photo.User.FoodieLevelNumber}.");
+                    }
+                #endregion
+
+                Console.WriteLine($"TotalPhotos: {restaurant.TotalPhotos}.");
+
+                #region Reviews
+                if (restaurant.Reviews != null && restaurant.Reviews.Count > 0)
+                    foreach (var review in restaurant.Reviews)
+                    {
+                        Console.WriteLine($"\t\t Review - ID: {review.ID}.");
+                        Console.WriteLine($"\t\t Review - Likes: {review.Likes}.");
+                        Console.WriteLine($"\t\t Review - Rating: {review.Rating}.");
+                        Console.WriteLine($"\t\t Review - Rating Text: {review.RatingText}.");
+                        Console.WriteLine($"\t\t Review - Review Text: {review.ReviewText}.");
+                        Console.WriteLine($"\t\t Review - Timestamp: {review.Timestamp}.");
+                        Console.WriteLine($"\t\t Review - Total Comments: {review.TotalComments}.");
+
+                        Console.WriteLine($"\t\t User - Name: {review.User.Name}.");
+                        Console.WriteLine($"\t\t User - Profile Image Url: {review.User.ProfileImageUrl}.");
+                        Console.WriteLine($"\t\t User - Profile Url: {review.User.ProfileUrl}.");
+                        Console.WriteLine($"\t\t User - Zomato Handle: {review.User.ZomatoHandle}.");
+                        Console.WriteLine($"\t\t User - Foodie Level: {review.User.FoodieLevel}.");
+                        Console.WriteLine($"\t\t User - Foodie Level Number: {review.User.FoodieLevelNumber}.");
+                    }
+                #endregion
             }
+            #endregion
         }
         #endregion
     }

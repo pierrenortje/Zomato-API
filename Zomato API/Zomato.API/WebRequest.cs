@@ -146,9 +146,9 @@ namespace Zomato.API
             return establishmentsRootObject;
         }
 
-        internal async Task<RestaurantRootObject> GetRestaurantAsync(int restaurantID)
+        internal async Task<ZomatoRestaurant> GetRestaurantAsync(int restaurantID)
         {
-            RestaurantRootObject restaurantRootObject = null;
+            ZomatoRestaurant restaurantRootObject = null;
 
             var parameters = new List<KeyValuePair<string, string>>();
 
@@ -157,7 +157,7 @@ namespace Zomato.API
             var response = await webRequest.Get(RestaurantAction.Get, parameters);
 
             if (!string.IsNullOrEmpty(response))
-                restaurantRootObject = JsonConvert.DeserializeObject<RestaurantRootObject>(response);
+                restaurantRootObject = JsonConvert.DeserializeObject<ZomatoRestaurant>(response);
 
             return restaurantRootObject;
         }

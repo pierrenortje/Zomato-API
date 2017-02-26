@@ -142,6 +142,58 @@ namespace Zomato.API
         }
 
         /// <summary>
+        /// Get a food & nightlife index of given coordinates.
+        /// </summary>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <returns>A list of popular cuisines and nearby restaurants around the given coordinates.</returns>
+        public async Task<Geocode> SelectGeocodeAsync(double latitude, double longitude)
+        {
+            return await SelectGeocodeAsync(null, latitude, longitude, null);
+        }
+
+        /// <summary>
+        /// Get the daily menu by restaurant ID.
+        /// </summary>
+        /// <param name="restaurantID">The restaurant's ID.</param>
+        /// <returns>The daily menu.</returns>
+        public async Task<DailyMenus> GetDailyMenuAsync(int restaurantID)
+        {
+            DailyMenus dailyMenus = null;
+            DailyMenuRootObject dailyMenuResponse = null;
+
+            dailyMenuResponse = await webRequest.GetDailyMenuAsync(restaurantID);
+
+            if (dailyMenuResponse == null)
+                return dailyMenus;
+
+            dailyMenus = new DailyMenus();
+
+            foreach (var dailyMenu in dailyMenuResponse.DailyMenus)
+            {
+                var dailyMenuItem = new DailyMenu
+                {
+                    ID = dailyMenu.ID,
+                    Name = dailyMenu.Name,
+                    StartDate = dailyMenu.StartDate,
+                    EndDate = dailyMenu.EndDate
+                };
+
+                foreach (var dish in dailyMenu.Dishes)
+                    dailyMenuItem.Dishes.Add(new Dish
+                    {
+                        ID = dish.ID,
+                        Name = dish.Name,
+                        Price = dish.Price
+                    });
+
+                dailyMenus.Add(dailyMenuItem);
+            }
+
+            return dailyMenus;
+        }
+
+        /// <summary>
         /// Get a restaurant by its ID. Partner Access is required to access photos and reviews.
         /// </summary>
         /// <param name="restaurantID">The restaurant's ID.</param>
@@ -149,7 +201,7 @@ namespace Zomato.API
         public async Task<Restaurant> GetRestaurantAsync(int restaurantID)
         {
             Restaurant restaurant = null;
-            RestaurantRootObject restaurantResponse = null;
+            ZomatoRestaurant restaurantResponse = null;
 
             restaurantResponse = await webRequest.GetRestaurantAsync(restaurantID);
 
@@ -209,18 +261,6 @@ namespace Zomato.API
                     });
             #endregion
 
-        /// <summary>
-        /// Get a food & nightlife index of given coordinates
-        /// </summary>
-        /// <param name="latitude">The latitude</param>
-        /// <param name="longitude">The longitude</param>
-        /// <returns></returns>
-        public async Task<Geocode> SelectGeocodeAsync(double latitude, double longitude)
-        {
-            return await SelectGeocodeAsync(null, latitude, longitude, null);
-        }
-        #endregion
-
             #region Restaurant
             restaurant = new Restaurant
             {
@@ -234,12 +274,12 @@ namespace Zomato.API
                 Cuisines = restaurantResponse.Cuisines,
                 PriceRange = restaurantResponse.PriceRange,
                 AverageCostForTwo = restaurantResponse.AverageCostForTwo,
-                FeaturedImageUrl = restaurantResponse.FeaturedImage,
+                FeaturedImageUrl = restaurantResponse.FeaturedImageUrl,
                 PhoneNumbers = restaurantResponse.PhoneNumbers,
-                Location = new Location
+                Location = new RestaurantLocation
                 {
                     Address = restaurantResponse.Location.Address,
-                    City = restaurantResponse.Location.City,
+                    CityName = restaurantResponse.Location.CityName,
                     Latitude = restaurantResponse.Location.Latitude,
                     Longitude = restaurantResponse.Location.Longitude,
                     ZipCode = restaurantResponse.Location.ZipCode
@@ -252,47 +292,6 @@ namespace Zomato.API
 
             return restaurant;
         }
-
-        /// <summary>
-        /// Get the daily menu by restaurant ID.
-        /// </summary>
-        /// <param name="restaurantID">The restaurant's ID.</param>
-        /// <returns>The daily menu.</returns>
-        public async Task<DailyMenus> GetDailyMenuAsync(int restaurantID)
-        {
-            DailyMenus dailyMenus = null;
-            DailyMenuRootObject dailyMenuResponse = null;
-
-            dailyMenuResponse = await webRequest.GetDailyMenuAsync(restaurantID);
-
-            if (dailyMenuResponse == null)
-                return dailyMenus;
-
-            dailyMenus = new DailyMenus();
-
-            foreach (var dailyMenu in dailyMenuResponse.DailyMenus)
-            {
-                var dailyMenuItem = new DailyMenu
-                {
-                    ID = dailyMenu.ID,
-                    Name = dailyMenu.Name,
-                    StartDate = dailyMenu.StartDate,
-                    EndDate = dailyMenu.EndDate
-                };
-
-                foreach (var dish in dailyMenu.Dishes)
-                    dailyMenuItem.Dishes.Add(new Dish
-                    {
-                        ID = dish.ID,
-                        Name = dish.Name,
-                        Price = dish.Price
-                    });
-
-                dailyMenus.Add(dailyMenuItem);
-            }
-
-            return dailyMenus;
-        }
         #endregion
 
         #region Private Async Methods
@@ -303,12 +302,12 @@ namespace Zomato.API
 
             citiesResponse = await webRequest.SelectCitiesAsync(queryText, latitude, longitude, cityIDs, count);
 
-            if (citiesResponse?.Locations == null)
+            if (citiesResponse?.LocationSuggestions == null)
                 return cities;
 
             cities = new Cities();
 
-            foreach (var city in citiesResponse.Locations)
+            foreach (var city in citiesResponse.LocationSuggestions)
             {
                 var country = new Country
                 {
@@ -377,38 +376,6 @@ namespace Zomato.API
             return cuisines;
         }
 
-        private async Task<Geocode> SelectGeocodeAsync(int? cityID, double? latitude, double? longitude, int? count)
-        {
-            Geocode geocode = null;
-            GeocodeRootObject geocodeResponse = null;
-
-            geocodeResponse = await webRequest.SelectGeocodeAsync(latitude, longitude);
-
-            if(geocodeResponse == null)
-                return geocode;
-
-            geocode = new Geocode();
-
-            geocode.region = geocodeResponse.region;
-            geocode.popularity = geocodeResponse.popularity;
-            geocode.link = geocodeResponse.link;
-
-            geocode.entityType = geocodeResponse.region.entityType;
-            geocode.entityID = geocodeResponse.region.entityID;
-            geocode.cityID = geocodeResponse.region.cityID;
-            geocode.countryID = geocodeResponse.region.countryID;
-            geocode.subZoneID = geocodeResponse.popularity.subzoneID;
-
-            geocode.nearbyRestaurantList = new NearbyRestaurantList();
-
-            foreach(var restaurant in geocodeResponse.nearbyRestaurants) {
-                geocode.nearbyRestaurantList.Add(restaurant.restaurant);   
-                geocode.nearbyResIDs.Add(restaurant.restaurant.ID);             
-            }
-
-            return geocode;
-        }
-
         private async Task<Establishments> SelectEstablishmentsAsync(int? cityID, double? latitude, double? longitude)
         {
             Establishments establishments = null;
@@ -429,6 +396,145 @@ namespace Zomato.API
                 });
 
             return establishments;
+        }
+
+        private async Task<Geocode> SelectGeocodeAsync(int? cityID, double? latitude, double? longitude, int? count)
+        {
+            Geocode geocode = null;
+            GeocodeRootObject geocodeResponse = null;
+
+            geocodeResponse = await webRequest.SelectGeocodeAsync(latitude, longitude);
+
+            if (geocodeResponse == null)
+                return geocode;
+
+            geocode = new Geocode
+            {
+                Location = new Location
+                {
+                    City = new City
+                    {
+                        ID = geocodeResponse.Location.CityID,
+                        Name = geocodeResponse.Location.CityName,
+                        Country = new Country
+                        {
+                            ID = geocodeResponse.Location.CountryID,
+                            Name = geocodeResponse.Location.CountryName
+                        }
+                    },
+                    Latitude = geocodeResponse.Location.Latitude,
+                    Longitude = geocodeResponse.Location.Longitude,
+                    Title = geocodeResponse.Location.Title
+                },
+                Link = geocodeResponse.Link,
+                Popularity = new Popularity
+                {
+                    City = new City
+                    {
+                        Name = geocodeResponse.Popularity.CityName
+                    },
+                    SubZone = new SubZone
+                    {
+                        ID = geocodeResponse.Popularity.SubZoneID,
+                        Name = geocodeResponse.Popularity.SubZoneName
+                    },
+                    NearbyRestaurantIDs = geocodeResponse.Popularity.NearbyRestaurantIDs,
+                    NightlifeIndex = geocodeResponse.Popularity.NightlifeIndex,
+                    NightlifeRestaurants = geocodeResponse.Popularity.NightlifeRestaurants,
+                    PopularityRating = geocodeResponse.Popularity.PopularityRating,
+                    TopCuisines = geocodeResponse.Popularity.TopCuisines,
+                    TotalPopularityRestaurants = geocodeResponse.Popularity.TotalPopularityRestaurants
+                },
+                NearbyRestaurantList = new NearbyRestaurantList()
+            };
+
+            #region Nearby Restaurants
+            foreach (var restaurant in geocodeResponse.Restaurants)
+            {
+                #region Photos
+                var photos = new Photos();
+                if (restaurant.Restaurants.Photos != null)
+                    foreach (var photo in restaurant.Restaurants.Photos)
+                        photos.Add(new Photo
+                        {
+                            ID = photo.ID,
+                            Caption = photo.Caption,
+                            Height = photo.Height,
+                            Width = photo.Width,
+                            LikesCount = photo.LikesCount,
+                            RestaurantID = photo.RestaurantID,
+                            ThumbUrl = photo.ThumbUrl,
+                            Timestamp = photo.Timestamp,
+                            TotalComments = photo.TotalComments,
+                            Url = photo.Url,
+                            User = new User
+                            {
+                                Name = photo.User.Name,
+                                FoodieLevel = photo.User.FoodieLevel,
+                                FoodieLevelNumber = photo.User.FoodieLevelNumber,
+                                ProfileImageUrl = photo.User.ProfileImageUrl,
+                                ProfileUrl = photo.User.ProfileUrl,
+                                ZomatoHandle = photo.User.ZomatoHandle
+                            }
+                        });
+                #endregion
+
+                #region Reviews
+                var reviews = new Reviews();
+                if (restaurant.Restaurants.Reviews != null)
+                    foreach (var review in restaurant.Restaurants.Reviews)
+                    reviews.Add(new Review
+                    {
+                        ID = review.ID,
+                        Likes = review.Likes,
+                        Rating = review.Rating,
+                        RatingText = review.RatingText,
+                        ReviewText = review.RatingText,
+                        Timestamp = review.Timestamp,
+                        TotalComments = review.TotalComments,
+                        User = new User
+                        {
+                            Name = review.User.Name,
+                            FoodieLevel = review.User.FoodieLevel,
+                            FoodieLevelNumber = review.User.FoodieLevelNumber,
+                            ProfileImageUrl = review.User.ProfileImageUrl,
+                            ProfileUrl = review.User.ProfileUrl,
+                            ZomatoHandle = review.User.ZomatoHandle
+                        }
+                    });
+                #endregion
+
+                geocode.NearbyRestaurantList.Add(new Restaurant
+                {
+                    ID = restaurant.Restaurants.ID,
+                    Name = restaurant.Restaurants.Name,
+                    AverageCostForTwo = restaurant.Restaurants.AverageCostForTwo,
+                    Cuisines = restaurant.Restaurants.Cuisines,
+                    EventsUrl = restaurant.Restaurants.EventsUrl,
+                    FeaturedImageUrl = restaurant.Restaurants.FeaturedImageUrl,
+                    Location = new RestaurantLocation
+                    {
+                        Address = restaurant.Restaurants.Location.Address,
+                        CityName = restaurant.Restaurants.Location.CityName,
+                        Latitude = restaurant.Restaurants.Location.Latitude,
+                        Longitude = restaurant.Restaurants.Location.Longitude,
+                        ZipCode = restaurant.Restaurants.Location.ZipCode
+                    },
+                    MenuUrl = restaurant.Restaurants.MenuUrl,
+                    PhoneNumbers = restaurant.Restaurants.PhoneNumbers,
+                    Photos = photos,
+                    PhotosUrl = restaurant.Restaurants.PhotosUrl,
+                    PriceRange = restaurant.Restaurants.PriceRange,
+                    Reviews = reviews,
+                    ThumbUrl = restaurant.Restaurants.ThumbUrl,
+                    TotalPhotos = restaurant.Restaurants.TotalPhotos,
+                    Url = restaurant.Restaurants.Url
+                });
+
+            }
+            #endregion
+
+            return geocode;
         }
         #endregion
     }
