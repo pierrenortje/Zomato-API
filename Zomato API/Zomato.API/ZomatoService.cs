@@ -152,6 +152,11 @@ namespace Zomato.API
             return await SelectGeocodeAsync(null, latitude, longitude, null);
         }
 
+        public async Task<LocationDetails> SelectLocationDetails(int locationID, string entityType)
+        {
+            return await SelectLocationDetails(locationID, entityType);
+        }
+
         /// <summary>
         /// Get the daily menu by restaurant ID.
         /// </summary>
@@ -448,6 +453,12 @@ namespace Zomato.API
                 NearbyRestaurantList = new NearbyRestaurantList()
             };
 
+            foreach(var zomatoRestaurant in geocodeResponse.Restaurants) {
+                geocode.NearbyRestaurantList.Add(ZomatoConverter.ConvertRestaurant(zomatoRestaurant.Restaurants, new Restaurant()));
+            }
+
+            #region Pierre_code_backup
+            /*
             #region Nearby Restaurants
             foreach (var restaurant in geocodeResponse.Restaurants)
             {
@@ -533,9 +544,47 @@ namespace Zomato.API
 
             }
             #endregion
+            */
+            #endregion
 
             return geocode;
         }
-        #endregion
+
+        private async Task<LocationDetails> SelectLocationDetails(int? locationID, string entityType)
+        {
+            LocationDetails locationDetails = null;
+            LocationDetailsRootObject locationDetailsResponse = null;
+
+            locationDetailsResponse = await webRequest.SelectLocationDetails(locationID, entityType);
+
+            if(locationDetailsResponse == null)
+                return locationDetails;
+
+            locationDetails = new LocationDetails
+            {
+                Location = new Location
+                {
+
+                },
+
+                Popularity = new Popularity
+                {
+
+                },
+
+                RestaurantCount = locationDetailsResponse.RestaurantCount,
+
+                BestRatedRestaurantList = new BestRatedRestaurantList()
+
+            };
+
+            foreach(var zomatoRestaurant in locationDetailsResponse.Restaurants) {
+                locationDetails.BestRatedRestaurantList.Add(ZomatoConverter.ConvertRestaurant(zomatoRestaurant.Restaurant, new Restaurant()));
+            }
+
+            return locationDetails;
+        }
+        #endregion      
+
     }
 }
