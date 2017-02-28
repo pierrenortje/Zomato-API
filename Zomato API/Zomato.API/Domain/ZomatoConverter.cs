@@ -14,7 +14,7 @@ namespace Zomato.API.Domain
         /// <param name="zomatoRestaurant">The populated ZomatoRestaurant object</param>
         /// <param name="restaurant">The empty Restaurant object</param>
         /// <returns></returns>
-        public static Restaurant ConvertRestaurant(ZomatoRestaurant zomatoRestaurant, Restaurant restaurant)
+        public static Restaurant ConvertRestaurant(ZomatoRestaurant zomatoRestaurant)
         {
             Restaurant newRestaurant = new Restaurant();
 
