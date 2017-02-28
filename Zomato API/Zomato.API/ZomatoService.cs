@@ -577,7 +577,11 @@ namespace Zomato.API
                     City = new City
                     {
                         ID = locationDetailsResponse.Location.CityID,
-                        Name = locationDetailsResponse.Location.CityName
+                        Name = locationDetailsResponse.Location.CityName,
+                        Country = new Country
+                        {
+                            Name = locationDetailsResponse.Location.CountryName
+                        }
                     }
                 },
 
