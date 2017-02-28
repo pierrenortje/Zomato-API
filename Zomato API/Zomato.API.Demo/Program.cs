@@ -489,8 +489,11 @@ namespace Zomato.API.Demo
             Console.WriteLine("Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location");
             Console.WriteLine(new string('=', 20));
 
+            Console.WriteLine("Country:\t" + locationDetails.Location.City.Country.Name);
+            Console.WriteLine("City:\t" + locationDetails.Location.City.Name);
             Console.WriteLine("Popularity:\t" + locationDetails.Popularity.PopularityRating);
             Console.WriteLine("Nightlife index:\t" + locationDetails.Popularity.NightlifeIndex);
+
             
             Console.WriteLine("\nBest rated restaurants:");
             

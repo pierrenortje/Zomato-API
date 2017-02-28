@@ -23,7 +23,7 @@ namespace Zomato.API.Domain
         [JsonProperty("top_cuisines")]
         internal List<string> TopCuisines { get; set; }
 
-        [JsonProperty("locaiton")]
+        [JsonProperty("location")]
         internal ZomatoLocation Location { get; set; }
 
         /// <summary>

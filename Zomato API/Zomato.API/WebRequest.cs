@@ -203,7 +203,7 @@ namespace Zomato.API
 
             if(locationID.HasValue && !string.IsNullOrEmpty(entityType)) {
                 parameters.AddRange( new List<KeyValuePair<string,string>> {
-                        new KeyValuePair<string, string>("location_id", locationID.Value.ToString()) ,
+                        new KeyValuePair<string, string>("entity_id", locationID.Value.ToString()) ,
                         new KeyValuePair<string, string>("entity_type", entityType)
                 });
             } else {
