@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Zomato.API.Domain
 {
-    internal sealed class BestRatedRestaurants
+    internal sealed class LocationDetailsResponse
     {
         [JsonProperty("restaurant")]
         internal ZomatoRestaurant Restaurant { get; set; }
     }
 
     internal sealed class LocationDetailsRootObject
-    {  
+    {
         [JsonProperty("popularity")]
         internal string Popularity { get; set; }
 
@@ -18,7 +18,7 @@ namespace Zomato.API.Domain
         internal string NightLifeIndex { get; set; }
 
         [JsonProperty("nearby_res")]
-        internal List<string> NearbyRes { get; set; }
+        internal List<string> NearbyRestaurantIDs { get; set; }
 
         [JsonProperty("top_cuisines")]
         internal List<string> TopCuisines { get; set; }
@@ -27,12 +27,12 @@ namespace Zomato.API.Domain
         internal ZomatoLocation Location { get; set; }
 
         /// <summary>
-        /// Number of restaurants listed
+        /// Number of restaurants listed.
         /// </summary>
         [JsonProperty("num_restaurant")]
         internal int RestaurantCount { get; set; }
 
         [JsonProperty("best_rated_restaurant")]
-        internal List<BestRatedRestaurants> Restaurants { get; set; }
+        internal List<LocationDetailsResponse> Restaurants { get; set; }
     }
 }

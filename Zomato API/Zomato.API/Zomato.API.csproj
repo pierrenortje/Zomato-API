@@ -81,7 +81,6 @@
     <Compile Include="Domain\RestaurantResponse.cs" />
     <Compile Include="Domain\SubZone.cs" />
     <Compile Include="Domain\ZomatoCity.cs" />
-    <Compile Include="Domain\ZomatoConverter.cs" />
     <Compile Include="Domain\ZomatoLocation.cs" />
     <Compile Include="Domain\ZomatoPhoto.cs" />
     <Compile Include="Domain\ZomatoPopularity.cs" />
@@ -93,6 +92,9 @@
     <Compile Include="WebRequest.cs" />
     <Compile Include="ZomatoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZomatoServiceCommon.cs" />
+    <Compile Include="ZomatoServiceLocation.cs" />
+    <Compile Include="ZomatoServiceRestaurant.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

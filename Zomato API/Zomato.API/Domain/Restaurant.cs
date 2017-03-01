@@ -22,6 +22,8 @@ namespace Zomato.API.Domain
         public Photos Photos { get; set; }
     }
 
+    public sealed class Restaurants : List<Restaurant> { }
+
     public sealed class Photo
     {
         public string ID { get; set; }

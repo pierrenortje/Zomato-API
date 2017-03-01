@@ -12,7 +12,7 @@ namespace Zomato.API.Domain
         internal string NightlifeIndex { get; set; }
 
         /// <summary>
-        /// List of nearby restaurants' IDs
+        /// List of nearby restaurants' IDs.
         /// </summary>
         [JsonProperty("nearby_res")]
         internal List<string> NearbyRestaurantIDs { get; set; }

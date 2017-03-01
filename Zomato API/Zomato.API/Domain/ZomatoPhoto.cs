@@ -45,5 +45,5 @@ namespace Zomato.API.Domain
         internal string LikesCount { get; set; }
     }
 
-    internal class ZomatoPhotos : List<ZomatoPhoto> { }
+    internal sealed class ZomatoPhotos : List<ZomatoPhoto> { }
 }

@@ -477,16 +477,16 @@ namespace Zomato.API.Demo
         }
         #endregion
 
-        #region Location_Details
+        #region Location Details
         private static async Task SelectLocationDetailsAsync(int locationID, string entityType)
         {
             var locationDetails = await zomatoService.SelectLocationDetailsAsync(locationID, entityType);
 
-            if(locationDetails == null)
-                throw new Exception("No location detail information found");
+            if (locationDetails == null)
+                throw new Exception("No location detail information found.");
 
             Console.WriteLine(new string('=', 20));
-            Console.WriteLine("Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location");
+            Console.WriteLine("Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location.");
             Console.WriteLine(new string('=', 20));
 
             Console.WriteLine("Country:\t" + locationDetails.Location.City.Country.Name);
@@ -494,12 +494,10 @@ namespace Zomato.API.Demo
             Console.WriteLine("Popularity:\t" + locationDetails.Popularity.PopularityRating);
             Console.WriteLine("Nightlife index:\t" + locationDetails.Popularity.NightlifeIndex);
 
-            
             Console.WriteLine("\nBest rated restaurants:");
-            
-            foreach(var restaurant in locationDetails.BestRatedRestaurantList) {
+
+            foreach (var restaurant in locationDetails.BestRatedRestaurantList)
                 Console.WriteLine(restaurant.Name);
-            }           
         }
         #endregion
     }

@@ -97,7 +97,7 @@ namespace Zomato.API
 
         internal async Task<CollectionsRootObject> SelectCollectionsAsync(int? cityID, double? latitude, double? longitude, int? count)
         {
-            CollectionsRootObject collectionsResponse = null;           
+            CollectionsRootObject collectionsResponse = null;
 
             var parameters = new List<KeyValuePair<string, string>>();
 
@@ -113,7 +113,7 @@ namespace Zomato.API
 
         internal async Task<CuisinesRootObject> SelectCuisinesAsync(int? cityID, double? latitude, double? longitude, int? count)
         {
-            CuisinesRootObject cuisinesRootObject = null;            
+            CuisinesRootObject cuisinesRootObject = null;
 
             var parameters = new List<KeyValuePair<string, string>>();
 
@@ -189,7 +189,7 @@ namespace Zomato.API
 
             var response = await webRequest.Get(CommonAction.SelectGeocode, parameters);
 
-            if(!string.IsNullOrEmpty(response))
+            if (!string.IsNullOrEmpty(response))
                 geocodeRootObject = JsonConvert.DeserializeObject<GeocodeRootObject>(response);
 
             return geocodeRootObject;
@@ -201,18 +201,17 @@ namespace Zomato.API
 
             var parameters = new List<KeyValuePair<string, string>>();
 
-            if(locationID.HasValue && !string.IsNullOrEmpty(entityType)) {
-                parameters.AddRange( new List<KeyValuePair<string,string>> {
-                        new KeyValuePair<string, string>("entity_id", locationID.Value.ToString()) ,
+            if (!locationID.HasValue || string.IsNullOrEmpty(entityType))
+                throw new Exception("You need to specify both the location ID and entity type.");
+
+            parameters.AddRange(new List<KeyValuePair<string, string>> {
+                        new KeyValuePair<string, string>("entity_id", locationID.Value.ToString()),
                         new KeyValuePair<string, string>("entity_type", entityType)
                 });
-            } else {
-                throw new Exception ("Both the location ID and entity_type is required");
-            }
 
             var response = await webRequest.Get(CommonAction.SelectLocationDetails, parameters);
 
-            if(!string.IsNullOrEmpty(response))
+            if (!string.IsNullOrEmpty(response))
                 locationDetailsRootObject = JsonConvert.DeserializeObject<LocationDetailsRootObject>(response);
 
             return locationDetailsRootObject;
