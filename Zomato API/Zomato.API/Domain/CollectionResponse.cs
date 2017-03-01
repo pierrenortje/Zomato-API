@@ -38,6 +38,7 @@ namespace Zomato.API.Domain
 
     internal sealed class CollectionsRootObject
     {
+        #region Internal Properties
         [JsonProperty("collections")]
         internal List<CollectionsResponse> Collections { get; set; }
 
@@ -52,5 +53,26 @@ namespace Zomato.API.Domain
 
         [JsonProperty("has_total")]
         internal int HasTotal { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal Collections ToServiceObject()
+        {
+            var collections = new Collections();
+
+            foreach (var restaurant in this.Collections)
+                collections.Add(new Collection
+                {
+                    ID = restaurant.Collections.ID,
+                    Title = restaurant.Collections.Title,
+                    Url = restaurant.Collections.Url,
+                    Description = restaurant.Collections.Description
+                });
+
+            collections.ShareUrl = this.ShareUrl;
+
+            return collections;
+        }
+        #endregion
     }
 }

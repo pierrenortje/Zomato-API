@@ -22,41 +22,7 @@ namespace Zomato.API
             if (locationDetailsResponse == null)
                 return locationDetails;
 
-            locationDetails = new LocationDetails
-            {
-                Location = new Location
-                {
-                    EntityType = locationDetailsResponse.Location.EntityType,
-                    Longitude = locationDetailsResponse.Location.Longitude,
-                    Latitude = locationDetailsResponse.Location.Latitude,
-                    Title = locationDetailsResponse.Location.Title,
-                    City = new City
-                    {
-                        ID = locationDetailsResponse.Location.CityID,
-                        Name = locationDetailsResponse.Location.CityName,
-                        Country = new Country
-                        {
-                            Name = locationDetailsResponse.Location.CountryName
-                        }
-                    }
-                },
-                Popularity = new Popularity
-                {
-                    PopularityRating = locationDetailsResponse.Popularity,
-                    NightlifeIndex = locationDetailsResponse.NightLifeIndex,
-                    NearbyRestaurantIDs = locationDetailsResponse.NearbyRestaurantIDs,
-                    TopCuisines = locationDetailsResponse.TopCuisines
-                },
-                RestaurantCount = locationDetailsResponse.RestaurantCount
-            };
-
-            if (locationDetailsResponse.Restaurants.Count > 0)
-            {
-                locationDetails.BestRatedRestaurantList = new Restaurants();
-
-                foreach (var zomatoRestaurant in locationDetailsResponse.Restaurants)
-                    locationDetails.BestRatedRestaurantList.Add(zomatoRestaurant.Restaurant.ToZomatoObject());
-            }
+            locationDetails = locationDetailsResponse.ToServiceObject();
 
             return locationDetails;
         }
@@ -89,28 +55,7 @@ namespace Zomato.API
             if (zomatoLocations == null)
                 return locations;
 
-            if (zomatoLocations.Locations.Count > 0)
-            {
-                locations = new Locations();
-
-                foreach (var location in zomatoLocations.Locations)
-                    locations.Add(new Location
-                    {
-                        City = new City
-                        {
-                            ID = location.CityID,
-                            Name = location.CityName,
-                            Country = new Country
-                            {
-                                ID = location.CountryID,
-                                Name = location.CountryName
-                            }
-                        },
-                        Latitude = location.Latitude,
-                        Longitude = location.Longitude,
-                        Title = location.Title
-                    });
-            }
+            locations = zomatoLocations.ToServiceObject();
 
             return locations;
         }

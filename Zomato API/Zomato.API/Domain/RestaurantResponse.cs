@@ -91,15 +91,22 @@ namespace Zomato.API.Domain
         #endregion
 
         #region Internal Methods
-        internal Restaurant ToZomatoObject()
+        internal Restaurant ToServiceObject()
         {
             var restaurant = new Restaurant
             {
                 ID = this.ID,
                 Name = this.Name,
-                AverageCostForTwo = this.AverageCostForTwo,
-                Cuisines = this.Cuisines,
+                Url = this.Url,
                 EventsUrl = this.EventsUrl,
+                MenuUrl = this.MenuUrl,
+                PhotosUrl = this.PhotosUrl,
+                ThumbUrl = this.ThumbUrl,
+                Cuisines = this.Cuisines,
+                PriceRange = this.PriceRange,
+                AverageCostForTwo = this.AverageCostForTwo,
+                PhoneNumbers = this.PhoneNumbers,
+
                 FeaturedImageUrl = this.FeaturedImageUrl,
                 Location = new RestaurantLocation
                 {
@@ -109,13 +116,7 @@ namespace Zomato.API.Domain
                     Longitude = this.Location.Longitude,
                     ZipCode = this.Location.ZipCode
                 },
-                MenuUrl = this.MenuUrl,
-                PhoneNumbers = this.PhoneNumbers,
-                PhotosUrl = this.PhotosUrl,
-                PriceRange = this.PriceRange,
-                ThumbUrl = this.ThumbUrl,
-                TotalPhotos = this.TotalPhotos,
-                Url = this.Url
+                TotalPhotos = this.TotalPhotos
             };
 
             #region Photos

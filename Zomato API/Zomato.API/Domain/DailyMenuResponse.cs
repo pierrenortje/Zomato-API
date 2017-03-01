@@ -35,7 +35,39 @@ namespace Zomato.API.Domain
 
     internal sealed class DailyMenuRootObject
     {
+        #region Internal Properties
         [JsonProperty("daily_menu")]
         internal List<DailyMenuResponse> DailyMenus { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal DailyMenus ToServiceObject()
+        {
+            var dailyMenus = new DailyMenus();
+
+            foreach (var dailyMenu in this.DailyMenus)
+            {
+                var dailyMenuItem = new DailyMenu
+                {
+                    ID = dailyMenu.ID,
+                    Name = dailyMenu.Name,
+                    StartDate = dailyMenu.StartDate,
+                    EndDate = dailyMenu.EndDate
+                };
+
+                foreach (var dish in dailyMenu.Dishes)
+                    dailyMenuItem.Dishes.Add(new Dish
+                    {
+                        ID = dish.ID,
+                        Name = dish.Name,
+                        Price = dish.Price
+                    });
+
+                dailyMenus.Add(dailyMenuItem);
+            }
+
+            return dailyMenus;
+        }
+        #endregion
     }
 }

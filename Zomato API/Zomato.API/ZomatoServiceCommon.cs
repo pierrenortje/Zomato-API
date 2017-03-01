@@ -20,14 +20,7 @@ namespace Zomato.API
             if (categoriesResponse?.Categories == null)
                 return categories;
 
-            categories = new Categories();
-
-            foreach (var category in categoriesResponse.Categories)
-                categories.Add(new Category
-                {
-                    ID = category.Categories.ID,
-                    Name = category.Categories.Name
-                });
+            categories = categoriesResponse.ToServiceObject();
 
             return categories;
         }

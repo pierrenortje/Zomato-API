@@ -58,20 +58,7 @@ namespace Zomato.API
             if (collectionResponse?.Collections == null)
                 return collections;
 
-            collections = new Collections();
-
-            foreach (var restaurant in collectionResponse.Collections)
-            {
-                collections.Add(new Collection
-                {
-                    ID = restaurant.Collections.ID,
-                    Title = restaurant.Collections.Title,
-                    Url = restaurant.Collections.Url,
-                    Description = restaurant.Collections.Description
-                });
-            }
-
-            collections.ShareUrl = collectionResponse.ShareUrl;
+            collections = collectionResponse.ToServiceObject();
 
             return collections;
         }
@@ -86,14 +73,7 @@ namespace Zomato.API
             if (cuisinesResponse?.Cuisines == null)
                 return cuisines;
 
-            cuisines = new Cuisines();
-
-            foreach (var cuisine in cuisinesResponse.Cuisines)
-                cuisines.Add(new Cuisine
-                {
-                    ID = cuisine.Cuisines.ID,
-                    Name = cuisine.Cuisines.Name
-                });
+            cuisines = cuisinesResponse.ToServiceObject();
 
             return cuisines;
         }
@@ -108,14 +88,7 @@ namespace Zomato.API
             if (establishmentsResponse?.Establishments == null)
                 return establishments;
 
-            establishments = new Establishments();
-
-            foreach (var establishment in establishmentsResponse.Establishments)
-                establishments.Add(new Establishment
-                {
-                    ID = establishment.Establishments.ID,
-                    Name = establishment.Establishments.Name
-                });
+            establishments = establishmentsResponse.ToServiceObject();
 
             return establishments;
         }
@@ -130,48 +103,7 @@ namespace Zomato.API
             if (geocodeResponse == null)
                 return geocode;
 
-            geocode = new Geocode
-            {
-                Location = new Location
-                {
-                    City = new City
-                    {
-                        ID = geocodeResponse.Location.CityID,
-                        Name = geocodeResponse.Location.CityName,
-                        Country = new Country
-                        {
-                            ID = geocodeResponse.Location.CountryID,
-                            Name = geocodeResponse.Location.CountryName
-                        }
-                    },
-                    Latitude = geocodeResponse.Location.Latitude,
-                    Longitude = geocodeResponse.Location.Longitude,
-                    Title = geocodeResponse.Location.Title
-                },
-                Link = geocodeResponse.Link,
-                Popularity = new Popularity
-                {
-                    City = new City
-                    {
-                        Name = geocodeResponse.Popularity.CityName
-                    },
-                    SubZone = new SubZone
-                    {
-                        ID = geocodeResponse.Popularity.SubZoneID,
-                        Name = geocodeResponse.Popularity.SubZoneName
-                    },
-                    NearbyRestaurantIDs = geocodeResponse.Popularity.NearbyRestaurantIDs,
-                    NightlifeIndex = geocodeResponse.Popularity.NightlifeIndex,
-                    NightlifeRestaurants = geocodeResponse.Popularity.NightlifeRestaurants,
-                    PopularityRating = geocodeResponse.Popularity.PopularityRating,
-                    TopCuisines = geocodeResponse.Popularity.TopCuisines,
-                    TotalPopularityRestaurants = geocodeResponse.Popularity.TotalPopularityRestaurants
-                },
-                NearbyRestaurantList = new NearbyRestaurantList()
-            };
-
-            foreach (var zomatoRestaurant in geocodeResponse.Restaurants)
-                geocode.NearbyRestaurantList.Add(zomatoRestaurant.Restaurants.ToZomatoObject());
+            geocode = geocodeResponse.ToServiceObject();
 
             return geocode;
         }

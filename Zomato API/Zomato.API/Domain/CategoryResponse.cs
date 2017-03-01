@@ -20,7 +20,25 @@ namespace Zomato.API.Domain
 
     internal sealed class CategoriesRootObject
     {
+        #region Internal Properties
         [JsonProperty("categories")]
         internal List<CategoriesResponse> Categories { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal Categories ToServiceObject()
+        {
+            var categories = new Categories();
+
+            foreach (var category in this.Categories)
+                categories.Add(new Category
+                {
+                    ID = category.Categories.ID,
+                    Name = category.Categories.Name
+                });
+
+            return categories;
+        }
+        #endregion
     }
 }
