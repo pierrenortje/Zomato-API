@@ -47,7 +47,7 @@ namespace Zomato.API
         /// </summary>
         /// <param name="latitude">The latitude.</param>
         /// <param name="longitude">The longitude.</param>
-        /// <param name="count">Max results to return</param>
+        /// <param name="count">Max results to return.</param>
         /// <returns>A list of categories.</returns>
         public async Task<Cities> SelectCitiesAsync(double latitude, double longitude, int? count = null)
         {

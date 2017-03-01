@@ -47,15 +47,72 @@ namespace Zomato.API
                     NearbyRestaurantIDs = locationDetailsResponse.NearbyRestaurantIDs,
                     TopCuisines = locationDetailsResponse.TopCuisines
                 },
-                RestaurantCount = locationDetailsResponse.RestaurantCount,
-                BestRatedRestaurantList = new Restaurants()
+                RestaurantCount = locationDetailsResponse.RestaurantCount
             };
 
-            foreach (var zomatoRestaurant in locationDetailsResponse.Restaurants)
-                locationDetails.BestRatedRestaurantList.Add(zomatoRestaurant.Restaurant.ToZomatoObject());
+            if (locationDetailsResponse.Restaurants.Count > 0)
+            {
+                locationDetails.BestRatedRestaurantList = new Restaurants();
+
+                foreach (var zomatoRestaurant in locationDetailsResponse.Restaurants)
+                    locationDetails.BestRatedRestaurantList.Add(zomatoRestaurant.Restaurant.ToZomatoObject());
+            }
 
             return locationDetails;
         }
         #endregion
+
+        /// <summary>
+        /// Search for Zomato locations by keyword. Provide coordinates to get better search results.
+        /// </summary>
+        /// <param name="queryText">The text to search for.</param>
+        /// <returns>A list of locations.</returns>
+        public async Task<Locations> SearchLocationAsync(string queryText, int? count = null)
+        {
+            return await SearchLocationAsync(queryText, null, null, count);
+        }
+        /// <summary>
+        /// Search for Zomato locations by keyword. Provide coordinates to get better search results.
+        /// </summary>
+        /// <param name="queryText">The text to search for.</param>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="count">Max results to return.</param>
+        /// <returns>A list of locations.</returns>
+        public async Task<Locations> SearchLocationAsync(string queryText, double? latitude, double? longitude, int? count = null)
+        {
+            Locations locations = null;
+            LocationRootObject zomatoLocations = null;
+
+            zomatoLocations = await webRequest.SearchLocationAsync(queryText, latitude, longitude, count);
+
+            if (zomatoLocations == null)
+                return locations;
+
+            if (zomatoLocations.Locations.Count > 0)
+            {
+                locations = new Locations();
+
+                foreach (var location in zomatoLocations.Locations)
+                    locations.Add(new Location
+                    {
+                        City = new City
+                        {
+                            ID = location.CityID,
+                            Name = location.CityName,
+                            Country = new Country
+                            {
+                                ID = location.CountryID,
+                                Name = location.CountryName
+                            }
+                        },
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude,
+                        Title = location.Title
+                    });
+            }
+
+            return locations;
+        }
     }
 }

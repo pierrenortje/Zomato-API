@@ -35,11 +35,6 @@
         /// Get Foodie and Nightlife Index, list of popular cuisines and nearby restaurants around the given coordinates.
         /// </summary>
         internal const string SelectGeocode = "geocode";
-
-        /// <summary>
-        /// Get Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location
-        /// </summary>
-        internal const string SelectLocationDetails = "location_details";
         #endregion
     }
 }

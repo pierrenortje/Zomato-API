@@ -93,7 +93,9 @@ namespace Zomato.API.Demo
 
                 //await SelectGeocodeAsync(40.7, -73.9);
 
-                await SelectLocationDetailsAsync(64, "city");
+                //await SelectLocationDetailsAsync(64, "city");
+
+                await SearchLocationAsync("cape");
             }
             catch (Exception ex)
             {
@@ -498,6 +500,33 @@ namespace Zomato.API.Demo
 
             foreach (var restaurant in locationDetails.BestRatedRestaurantList)
                 Console.WriteLine(restaurant.Name);
+        }
+        #endregion
+
+        #region Locations
+        private static async Task SearchLocationAsync(string queryText)
+        {
+            var locations = await zomatoService.SearchLocationAsync(queryText);
+
+            if (locations == null)
+                throw new Exception("No location information found.");
+
+            Console.WriteLine(new string('=', 20));
+            Console.WriteLine("A list of locations.");
+            Console.WriteLine(new string('=', 20));
+
+            foreach (var location in locations)
+            {
+                Console.WriteLine($"Title: {location.Title}.");
+                Console.WriteLine($"Longitude: {location.Longitude}.");
+                Console.WriteLine($"Latitude: {location.Latitude}.");
+                Console.WriteLine($"City ID: {location.City.ID}.");
+                Console.WriteLine($"City Name: {location.City.Name}.");
+                Console.WriteLine($"Country ID: {location.City.Country.ID}.");
+                Console.WriteLine($"Country Name: {location.City.Country.Name}.");
+            }
+
+            Console.WriteLine("\n\n");
         }
         #endregion
     }

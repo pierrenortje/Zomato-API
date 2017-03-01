@@ -75,6 +75,7 @@
     <Compile Include="Domain\Establishment.cs" />
     <Compile Include="Domain\EstablishmentResponse.cs" />
     <Compile Include="Domain\Location.cs" />
+    <Compile Include="Domain\LocationResponse.cs" />
     <Compile Include="Domain\RestaurantLocation.cs" />
     <Compile Include="Domain\Popularity.cs" />
     <Compile Include="Domain\Restaurant.cs" />

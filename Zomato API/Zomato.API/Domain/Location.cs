@@ -1,4 +1,6 @@
-﻿namespace Zomato.API.Domain
+﻿using System.Collections.Generic;
+
+namespace Zomato.API.Domain
 {
     public sealed class Location
     {
@@ -8,4 +10,5 @@
         public string Longitude { get; set; }
         public City City { get; set; }
     }
+    public sealed class Locations : List<Location> { }
 }

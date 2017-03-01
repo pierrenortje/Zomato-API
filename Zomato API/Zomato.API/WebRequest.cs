@@ -209,12 +209,33 @@ namespace Zomato.API
                         new KeyValuePair<string, string>("entity_type", entityType)
                 });
 
-            var response = await webRequest.Get(CommonAction.SelectLocationDetails, parameters);
+            var response = await webRequest.Get(LocationActions.GetDetails, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 locationDetailsRootObject = JsonConvert.DeserializeObject<LocationDetailsRootObject>(response);
 
             return locationDetailsRootObject;
+        }
+
+        internal async Task<LocationRootObject> SearchLocationAsync(string queryText, double? latitude, double? longitude, int? count)
+        {
+            LocationRootObject locations = null;
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            if (string.IsNullOrEmpty(queryText))
+                throw new Exception("You need to specify the search text.");
+
+            parameters.Add(new KeyValuePair<string, string>("q", queryText));
+
+            AppendBaseParameters(ref parameters, null, latitude, longitude, count);
+
+            var response = await webRequest.Get(LocationActions.Search, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                locations = JsonConvert.DeserializeObject<LocationRootObject>(response);
+
+            return locations;
         }
         #endregion
     }
