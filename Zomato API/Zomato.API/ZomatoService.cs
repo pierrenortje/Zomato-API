@@ -153,6 +153,17 @@ namespace Zomato.API
         }
 
         /// <summary>
+        /// Get Foodie Index, Nightlife Index, Top Cuisines and Best rated restaurants in a given location
+        /// </summary>
+        /// <param name="locationID">ID of the location</param>
+        /// <param name="entityType">Name of the entity</param>
+        /// <returns></returns>
+        public async Task<LocationDetails> SelectLocationDetailsAsync(int locationID, string entityType)
+        {
+            return await SelectLocationDetailsAsyncP(locationID, entityType);
+        }
+
+        /// <summary>
         /// Get the daily menu by restaurant ID.
         /// </summary>
         /// <param name="restaurantID">The restaurant's ID.</param>
@@ -448,6 +459,12 @@ namespace Zomato.API
                 NearbyRestaurantList = new NearbyRestaurantList()
             };
 
+            foreach(var zomatoRestaurant in geocodeResponse.Restaurants) {
+                geocode.NearbyRestaurantList.Add(ZomatoConverter.ConvertRestaurant(zomatoRestaurant.Restaurants));
+            }
+
+            #region Pierre_code_backup
+            /*
             #region Nearby Restaurants
             foreach (var restaurant in geocodeResponse.Restaurants)
             {
@@ -533,9 +550,62 @@ namespace Zomato.API
 
             }
             #endregion
+            */
+            #endregion
 
             return geocode;
         }
-        #endregion
+
+        private async Task<LocationDetails> SelectLocationDetailsAsyncP(int? locationID, string entityType)
+        {
+            LocationDetails locationDetails = null;
+            LocationDetailsRootObject locationDetailsResponse = null;
+
+            locationDetailsResponse = await webRequest.SelectLocationDetails(locationID, entityType);
+
+            if(locationDetailsResponse == null)
+                return locationDetails;
+
+            locationDetails = new LocationDetails
+            {
+                Location = new Location
+                {
+                    EntityType = locationDetailsResponse.Location.EntityType,                    
+                    Longitude = locationDetailsResponse.Location.Longitude,
+                    Latitude = locationDetailsResponse.Location.Latitude,
+                    Title = locationDetailsResponse.Location.Title,
+                    City = new City
+                    {
+                        ID = locationDetailsResponse.Location.CityID,
+                        Name = locationDetailsResponse.Location.CityName,
+                        Country = new Country
+                        {
+                            Name = locationDetailsResponse.Location.CountryName
+                        }
+                    }
+                },
+
+                Popularity = new Popularity
+                {                    
+                    PopularityRating = locationDetailsResponse.Popularity,
+                    NightlifeIndex = locationDetailsResponse.NightLifeIndex,
+                    NearbyRestaurantIDs = locationDetailsResponse.NearbyRes,
+                    TopCuisines = locationDetailsResponse.TopCuisines                 
+                },
+
+                RestaurantCount = locationDetailsResponse.RestaurantCount,
+
+                BestRatedRestaurantList = new BestRatedRestaurantList()
+
+            };
+
+            foreach(var zomatoRestaurant in locationDetailsResponse.Restaurants) {
+                locationDetails.BestRatedRestaurantList.Add(ZomatoConverter.ConvertRestaurant(zomatoRestaurant.Restaurant));
+            }
+
+            return locationDetails;
+        }
+        #endregion      
+
     }
 }

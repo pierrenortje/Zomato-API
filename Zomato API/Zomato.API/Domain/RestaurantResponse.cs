@@ -2,7 +2,7 @@
 
 namespace Zomato.API.Domain
 {
-    internal sealed class ZomatoRestaurant
+    public sealed class ZomatoRestaurant
     {
         [JsonProperty("id")]
         internal string ID { get; set; }
@@ -87,5 +87,5 @@ namespace Zomato.API.Domain
 
         [JsonProperty("all_reviews")]
         internal ZomatoRestaurantReviews Reviews { get; set; }
-    }
+    }    
 }

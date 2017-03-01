@@ -61,6 +61,8 @@
     <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\City.cs" />
     <Compile Include="Domain\CityResponse.cs" />
+    <Compile Include="Domain\LocationDetailsResponse.cs" />
+    <Compile Include="Domain\LocationDetails.cs" />
     <Compile Include="Domain\CollectionResponse.cs" />
     <Compile Include="Domain\Collection.cs" />
     <Compile Include="Domain\Country.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Domain\RestaurantResponse.cs" />
     <Compile Include="Domain\SubZone.cs" />
     <Compile Include="Domain\ZomatoCity.cs" />
+    <Compile Include="Domain\ZomatoConverter.cs" />
     <Compile Include="Domain\ZomatoLocation.cs" />
     <Compile Include="Domain\ZomatoPhoto.cs" />
     <Compile Include="Domain\ZomatoPopularity.cs" />

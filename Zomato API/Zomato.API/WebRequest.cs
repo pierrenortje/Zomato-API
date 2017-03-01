@@ -194,6 +194,29 @@ namespace Zomato.API
 
             return geocodeRootObject;
         }
+
+        internal async Task<LocationDetailsRootObject> SelectLocationDetails(int? locationID, string entityType)
+        {
+            LocationDetailsRootObject locationDetailsRootObject = null;
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            if(locationID.HasValue && !string.IsNullOrEmpty(entityType)) {
+                parameters.AddRange( new List<KeyValuePair<string,string>> {
+                        new KeyValuePair<string, string>("entity_id", locationID.Value.ToString()) ,
+                        new KeyValuePair<string, string>("entity_type", entityType)
+                });
+            } else {
+                throw new Exception ("Both the location ID and entity_type is required");
+            }
+
+            var response = await webRequest.Get(CommonAction.SelectLocationDetails, parameters);
+
+            if(!string.IsNullOrEmpty(response))
+                locationDetailsRootObject = JsonConvert.DeserializeObject<LocationDetailsRootObject>(response);
+
+            return locationDetailsRootObject;
+        }
         #endregion
     }
 }
