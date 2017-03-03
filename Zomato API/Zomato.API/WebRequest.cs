@@ -65,7 +65,7 @@ namespace Zomato.API
         {
             CategoriesRootObject categoriesResponse = null;
 
-            var response = await webRequest.Get(CommonAction.SelectCategories);
+            var response = await webRequest.GetAsync(CommonAction.SelectCategories);
 
             if (!string.IsNullOrEmpty(response))
                 categoriesResponse = JsonConvert.DeserializeObject<CategoriesRootObject>(response);
@@ -87,7 +87,7 @@ namespace Zomato.API
             if (cityIDs?.Length > 0)
                 parameters.Add(new KeyValuePair<string, string>("city_ids", string.Join(",", cityIDs)));
 
-            var response = await webRequest.Get(CommonAction.SelectCities, parameters);
+            var response = await webRequest.GetAsync(CommonAction.SelectCities, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 citiesResponse = JsonConvert.DeserializeObject<CitiesRootObject>(response);
@@ -103,7 +103,7 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
 
-            var response = await webRequest.Get(CommonAction.SelectCollections, parameters);
+            var response = await webRequest.GetAsync(CommonAction.SelectCollections, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 collectionsResponse = JsonConvert.DeserializeObject<CollectionsRootObject>(response);
@@ -119,7 +119,7 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
 
-            var response = await webRequest.Get(CommonAction.SelectCuisines, parameters);
+            var response = await webRequest.GetAsync(CommonAction.SelectCuisines, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 cuisinesRootObject = JsonConvert.DeserializeObject<CuisinesRootObject>(response);
@@ -138,7 +138,7 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, null);
 
-            var response = await webRequest.Get(CommonAction.SelectEstablishments, parameters);
+            var response = await webRequest.GetAsync(CommonAction.SelectEstablishments, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 establishmentsRootObject = JsonConvert.DeserializeObject<EstablishmentsRootObject>(response);
@@ -154,7 +154,7 @@ namespace Zomato.API
 
             parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
 
-            var response = await webRequest.Get(RestaurantAction.Get, parameters);
+            var response = await webRequest.GetAsync(RestaurantAction.Get, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 restaurantRootObject = JsonConvert.DeserializeObject<ZomatoRestaurant>(response);
@@ -171,7 +171,7 @@ namespace Zomato.API
             parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
             string response = null;
 
-            response = await webRequest.Get(RestaurantAction.GetDailyMenu, parameters);
+            response = await webRequest.GetAsync(RestaurantAction.GetDailyMenu, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 dailyMenuRootObject = JsonConvert.DeserializeObject<DailyMenuRootObject>(response);
@@ -187,7 +187,7 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, null, latitude, longitude, null);
 
-            var response = await webRequest.Get(CommonAction.SelectGeocode, parameters);
+            var response = await webRequest.GetAsync(CommonAction.SelectGeocode, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 geocodeRootObject = JsonConvert.DeserializeObject<GeocodeRootObject>(response);
@@ -209,7 +209,7 @@ namespace Zomato.API
                         new KeyValuePair<string, string>("entity_type", entityType)
                 });
 
-            var response = await webRequest.Get(LocationActions.GetDetails, parameters);
+            var response = await webRequest.GetAsync(LocationActions.GetDetails, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 locationDetailsRootObject = JsonConvert.DeserializeObject<LocationDetailsRootObject>(response);
@@ -230,7 +230,7 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, null, latitude, longitude, count);
 
-            var response = await webRequest.Get(LocationActions.Search, parameters);
+            var response = await webRequest.GetAsync(LocationActions.Search, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 locations = JsonConvert.DeserializeObject<LocationRootObject>(response);
