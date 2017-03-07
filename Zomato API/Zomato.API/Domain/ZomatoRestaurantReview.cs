@@ -34,6 +34,23 @@ namespace Zomato.API.Domain
 
         [JsonProperty("comments_count")]
         internal string TotalComments { get; set; }
+
+        internal Review ToServiceObject()
+        {
+            var Review = new Review
+            {
+                ID = this.ID,
+                Rating = this.Rating,
+                ReviewText = this.ReviewText,
+                RatingText = this.RatingText,
+                Timestamp = this.Timestamp,
+                Likes = this.Likes,
+                TotalComments = this.TotalComments,
+                User = this.User.ToServiceObject()
+            };
+
+            return Review;
+        }
     }
 
     internal sealed class ZomatoRestaurantReviews : List<ZomatoRestaurantReview> { }

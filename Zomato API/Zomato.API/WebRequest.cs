@@ -237,6 +237,30 @@ namespace Zomato.API
 
             return locations;
         }
+
+        internal async Task<ReviewsRootObject> SelectReviews(int? resID, int? start, int? count)
+        {
+            ReviewsRootObject reviews = null;
+
+            if(!resID.HasValue)
+                throw new Exception("You must specify a Restaurant ID");
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            parameters.AddRange(
+                new List<KeyValuePair<string, string>> {
+                    new KeyValuePair<string, string>("res_id", resID.ToString()),
+                    new KeyValuePair<string, string>("start", start.ToString()),
+                    new KeyValuePair<string, string>("count", count.ToString())
+                });
+
+            var response = await webRequest.GetAsync(RestaurantAction.SelectReviews, parameters);
+
+            if(!string.IsNullOrEmpty(response))
+                reviews = JsonConvert.DeserializeObject<ReviewsRootObject>(response);
+
+            return reviews;
+        }
         #endregion
     }
 }
