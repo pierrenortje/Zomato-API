@@ -80,7 +80,7 @@
     <Compile Include="Domain\Popularity.cs" />
     <Compile Include="Domain\Restaurant.cs" />
     <Compile Include="Domain\RestaurantResponse.cs" />
-    <Compile Include="Domain\ReviewsEndpoint.cs" />
+    <Compile Include="Domain\ReviewCollection.cs" />
     <Compile Include="Domain\ReviewsResponse.cs" />
     <Compile Include="Domain\SubZone.cs" />
     <Compile Include="Domain\ZomatoCity.cs" />

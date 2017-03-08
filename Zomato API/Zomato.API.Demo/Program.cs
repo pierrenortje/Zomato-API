@@ -50,6 +50,8 @@ namespace Zomato.API.Demo
         #region Private Static Fields
         private static ZomatoService zomatoService = new ZomatoService();
 
+        private static int restaurantID = 18361256;
+
         private static string cityName = "Cape Town";
 
         private static double longitude = -33.9249;
@@ -87,9 +89,9 @@ namespace Zomato.API.Demo
                 //await SelectEstablishmentsAsync(64);
                 //await SelectEstablishmentsAsync(longitude, latitude);
 
-                //await GetRestaurantAsync(18361256);
+                //await GetRestaurantAsync(restaurantID);
 
-                //await GetDailyMenuAsync(18361256);
+                //await GetDailyMenuAsync(restaurantID);
 
                 //await SelectGeocodeAsync(40.7, -73.9);
 
@@ -97,7 +99,7 @@ namespace Zomato.API.Demo
 
                 //await SearchLocationAsync("cape");
 
-                await SelectReviewsASync(24127336, null, 3);
+                await SelectReviewsAsync(restaurantID, null, null);
             }
             catch (Exception ex)
             {
@@ -533,37 +535,39 @@ namespace Zomato.API.Demo
         #endregion
 
         #region Reviews
-        private static async Task SelectReviewsASync(int resID, int? start, int? count)
+        private static async Task SelectReviewsAsync(int restaurantID, int? start, int? count)
         {
-            var reviews = await zomatoService.GetReviewsAsync(resID, start, count);
+            var reviews = await zomatoService.SelectReviewsAsync(restaurantID, start, count);
 
-            if(reviews == null)
-                throw new Exception("No reviews found");
+            if (reviews == null)
+                throw new Exception("No reviews found.");
 
             Console.WriteLine(new string('=', 20));
             Console.WriteLine("A list of reviews:");
             Console.WriteLine(new string('=', 20));
 
             Console.WriteLine($"Reviews amount: {reviews.ReviewsCount}");
-            Console.WriteLine($"Reviews shown: {reviews.ReviewsShown}\n{new string ('_', 20)}");
+            Console.WriteLine($"Reviews start: {reviews.ReviewsCount}");
+            Console.WriteLine($"Reviews shown: {reviews.ReviewsShown}");
+            Console.WriteLine(new string('=', 20));
 
             foreach (var review in reviews.Reviews)
-                {
-                    Console.WriteLine($"\t Review - ID: {review.ID}.");
-                    Console.WriteLine($"\t Review - Likes: {review.Likes}.");
-                    Console.WriteLine($"\t Review - Rating: {review.Rating}.");
-                    Console.WriteLine($"\t Review - Rating Text: {review.RatingText}.");
-                    Console.WriteLine($"\t Review - Review Text: {review.ReviewText}.");
-                    Console.WriteLine($"\t Review - Timestamp: {review.Timestamp}.");
-                    Console.WriteLine($"\t Review - Total Comments: {review.TotalComments}.");
+            {
+                Console.WriteLine($"\t Review - ID: {review.ID}.");
+                Console.WriteLine($"\t Review - Likes: {review.Likes}.");
+                Console.WriteLine($"\t Review - Rating: {review.Rating}.");
+                Console.WriteLine($"\t Review - Rating Text: {review.RatingText}.");
+                Console.WriteLine($"\t Review - Review Text: {review.ReviewText}.");
+                Console.WriteLine($"\t Review - Timestamp: {review.Timestamp}.");
+                Console.WriteLine($"\t Review - Total Comments: {review.TotalComments}.");
 
-                    Console.WriteLine($"\t User - Name: {review.User.Name}.");
-                    Console.WriteLine($"\t User - Profile Image Url: {review.User.ProfileImageUrl}.");
-                    Console.WriteLine($"\t User - Profile Url: {review.User.ProfileUrl}.");
-                    Console.WriteLine($"\t User - Zomato Handle: {review.User.ZomatoHandle}.");
-                    Console.WriteLine($"\t User - Foodie Level: {review.User.FoodieLevel}.");
-                    Console.WriteLine($"\t User - Foodie Level Number: {review.User.FoodieLevelNumber}.\n");
-                }
+                Console.WriteLine($"\t User - Name: {review.User.Name}.");
+                Console.WriteLine($"\t User - Profile Image Url: {review.User.ProfileImageUrl}.");
+                Console.WriteLine($"\t User - Profile Url: {review.User.ProfileUrl}.");
+                Console.WriteLine($"\t User - Zomato Handle: {review.User.ZomatoHandle}.");
+                Console.WriteLine($"\t User - Foodie Level: {review.User.FoodieLevel}.");
+                Console.WriteLine($"\t User - Foodie Level Number: {review.User.FoodieLevelNumber}.\n");
+            }
         }
         #endregion
     }

@@ -47,28 +47,44 @@ namespace Zomato.API
         }
 
         /// <summary>
-        /// Get the reviews of a restaurant by ID
+        /// Select the reviews of a restaurant.
         /// </summary>
-        /// <param name="resID">Restaurant's ID</param>
-        /// <param name="start">Index to start from. (not required)</param>
-        /// <param name="count">Amount of reviews to display. (not required)</param>
-        /// <returns></returns>
-        public async Task<ReviewsEndpoint> GetReviewsAsync(int? resID, int? start, int? count)
+        /// <param name="restaurantID">Restaurant's ID.</param>
+        /// <returns>A list of reviews.</returns>
+        public async Task<ReviewCollection> SelectReviewsAsync(int restaurantID)
         {
-            ReviewsEndpoint reviewsEndpoint = null;
+            return await SelectReviewsAsync(restaurantID, null, null);
+        }
+        /// <summary>
+        /// Select the reviews of a restaurant.
+        /// </summary>
+        /// <param name="restaurantID">Restaurant's ID.</param>
+        /// <param name="count">Amount of reviews to display.</param>
+        /// <returns>A list of reviews.</returns>
+        public async Task<ReviewCollection> SelectReviewsAsync(int restaurantID, int start)
+        {
+            return await SelectReviewsAsync(restaurantID, start, null);
+        }
+        /// <summary>
+        /// Select the reviews of a restaurant.
+        /// </summary>
+        /// <param name="restaurantID">Restaurant's ID.</param>
+        /// <param name="start">Index to start from.</param>
+        /// <param name="count">Amount of reviews to display.</param>
+        /// <returns>A list of reviews.</returns>
+        public async Task<ReviewCollection> SelectReviewsAsync(int restaurantID, int? start, int? count = null)
+        {
+            ReviewCollection reviews = null;
             ReviewsRootObject reviewsResponse = null;
 
-            start = start.HasValue ? start : 0;
-            count = count.HasValue ? count : 0;
+            reviewsResponse = await webRequest.SelectReviews(restaurantID, start, count);
 
-            reviewsResponse = await webRequest.SelectReviews(resID, start, count);
+            if (reviewsResponse == null)
+                return reviews;
 
-            if(reviewsResponse == null)
-                return reviewsEndpoint;
+            reviews = reviewsResponse.ToServiceObject();
 
-            reviewsEndpoint = reviewsResponse.ToServiceObject();
-
-            return reviewsEndpoint;
+            return reviews;
         }
         #endregion
     }

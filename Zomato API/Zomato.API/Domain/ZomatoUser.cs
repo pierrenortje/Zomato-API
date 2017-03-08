@@ -4,6 +4,7 @@ namespace Zomato.API.Domain
 {
     internal sealed class ZomatoUser
     {
+        #region Internal Properties
         [JsonProperty("name")]
         internal string Name { get; set; }
 
@@ -42,10 +43,12 @@ namespace Zomato.API.Domain
         /// </summary>
         [JsonProperty("profile_image")]
         internal string ProfileImageUrl { get; set; }
+        #endregion
 
+        #region Internal Methods
         internal User ToServiceObject()
         {
-            var User = new User
+            var user = new User
             {
                 Name = this.Name,
                 ZomatoHandle = this.ZomatoHandle,
@@ -55,7 +58,8 @@ namespace Zomato.API.Domain
                 ProfileImageUrl = this.ProfileImageUrl
             };
 
-            return User;
+            return user;
         }
+        #endregion
     }
 }

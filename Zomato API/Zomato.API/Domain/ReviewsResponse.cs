@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace Zomato.API.Domain
 {
-
     internal sealed class UserReview
     {
         [JsonProperty("review")]
         internal ZomatoRestaurantReview Review { get; set; }
     }
+    internal sealed class UserReviews : List<UserReview> { }
 
     internal sealed class ReviewsRootObject
     {
@@ -17,40 +17,34 @@ namespace Zomato.API.Domain
         internal int ReviewsCount { get; set; }
 
         [JsonProperty("reviews_start")]
-        internal int? ReviewsStart { get; set; }
+        internal int ReviewsStart { get; set; }
 
         [JsonProperty("reviews_shown")]
-        internal int? ReviewsShown { get; set; }
+        internal int ReviewsShown { get; set; }
 
         [JsonProperty("user_reviews")]
-        internal List<UserReview> UserReviews { get; set; }
+        internal UserReviews UserReviews { get; set; }
 
         [JsonProperty("Respond to reviews via Zomato Dashboard")]
         internal string RespondLink { get; set; }
         #endregion
 
         #region Internal Methods
-        internal ReviewsEndpoint ToServiceObject()
+        internal ReviewCollection ToServiceObject()
         {
-            ReviewsShown = ReviewsShown.HasValue ? ReviewsShown : 0;
-            ReviewsStart = ReviewsStart.HasValue ? ReviewsStart : 0;
-
-            var reviewsEndpoint = new ReviewsEndpoint
+            var reviewsEndpoint = new ReviewCollection
             {
                 ReviewsCount = this.ReviewsCount,
-                ReviewsShown = (int) this.ReviewsShown,
-                ReviewsStart = (int) this.ReviewsStart,
-                Reviews = new List<Review>()
+                ReviewsShown = this.ReviewsShown,
+                ReviewsStart = this.ReviewsStart,
+                Reviews = new Reviews()
             };
 
-            foreach (var zomatoReview in this.UserReviews) {
+            foreach (var zomatoReview in this.UserReviews)
                 reviewsEndpoint.Reviews.Add(zomatoReview.Review.ToServiceObject());
-            }
 
             return reviewsEndpoint;
         }
         #endregion
     }
-
-
 }
