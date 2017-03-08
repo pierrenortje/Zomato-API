@@ -152,25 +152,7 @@ namespace Zomato.API.Domain
             if (this.Reviews != null)
             {
                 foreach (var review in this.Reviews)
-                    restaurant.Reviews.Add(new Review
-                    {
-                        ID = review.ID,
-                        Likes = review.Likes,
-                        Rating = review.Rating,
-                        RatingText = review.RatingText,
-                        ReviewText = review.RatingText,
-                        Timestamp = review.Timestamp,
-                        TotalComments = review.TotalComments,
-                        User = new User
-                        {
-                            Name = review.User.Name,
-                            FoodieLevel = review.User.FoodieLevel,
-                            FoodieLevelNumber = review.User.FoodieLevelNumber,
-                            ProfileImageUrl = review.User.ProfileImageUrl,
-                            ProfileUrl = review.User.ProfileUrl,
-                            ZomatoHandle = review.User.ZomatoHandle
-                        }
-                    });
+                    restaurant.Reviews.Add(review.ToServiceObject());
             }
             #endregion
 

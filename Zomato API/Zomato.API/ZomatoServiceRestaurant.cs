@@ -45,6 +45,31 @@ namespace Zomato.API
 
             return restaurant;
         }
+
+        /// <summary>
+        /// Get the reviews of a restaurant by ID
+        /// </summary>
+        /// <param name="resID">Restaurant's ID</param>
+        /// <param name="start">Index to start from. (not required)</param>
+        /// <param name="count">Amount of reviews to display. (not required)</param>
+        /// <returns></returns>
+        public async Task<ReviewsEndpoint> GetReviewsAsync(int? resID, int? start, int? count)
+        {
+            ReviewsEndpoint reviewsEndpoint = null;
+            ReviewsRootObject reviewsResponse = null;
+
+            start = start.HasValue ? start : 0;
+            count = count.HasValue ? count : 0;
+
+            reviewsResponse = await webRequest.SelectReviews(resID, start, count);
+
+            if(reviewsResponse == null)
+                return reviewsEndpoint;
+
+            reviewsEndpoint = reviewsResponse.ToServiceObject();
+
+            return reviewsEndpoint;
+        }
         #endregion
     }
 }

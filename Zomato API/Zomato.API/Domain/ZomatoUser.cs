@@ -42,5 +42,20 @@ namespace Zomato.API.Domain
         /// </summary>
         [JsonProperty("profile_image")]
         internal string ProfileImageUrl { get; set; }
+
+        internal User ToServiceObject()
+        {
+            var User = new User
+            {
+                Name = this.Name,
+                ZomatoHandle = this.ZomatoHandle,
+                FoodieLevel = this.FoodieLevel,
+                FoodieLevelNumber = this.FoodieLevelNumber,
+                ProfileUrl = this.ProfileUrl,
+                ProfileImageUrl = this.ProfileImageUrl
+            };
+
+            return User;
+        }
     }
 }
