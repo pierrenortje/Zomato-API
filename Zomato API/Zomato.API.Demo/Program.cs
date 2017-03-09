@@ -504,21 +504,21 @@ namespace Zomato.API.Demo
         }
         private static void PrintRestaurantLocation(RestaurantLocation restaurantLocation)
         {
-            Console.WriteLine($"Location - Address: {restaurantLocation.Address}.");
-            Console.WriteLine($"Location - City: {restaurantLocation.CityName}.");
-            Console.WriteLine($"Location - Latitude: {restaurantLocation.Latitude}.");
-            Console.WriteLine($"Location - Longitude: {restaurantLocation.Longitude}.");
-            Console.WriteLine($"Location - Zip Code: {restaurantLocation.ZipCode}.");
+            Console.WriteLine($"Restaurant Location - Address: {restaurantLocation.Address}.");
+            Console.WriteLine($"Restaurant Location - City: {restaurantLocation.CityName}.");
+            Console.WriteLine($"Restaurant Location - Latitude: {restaurantLocation.Latitude}.");
+            Console.WriteLine($"Restaurant Location - Longitude: {restaurantLocation.Longitude}.");
+            Console.WriteLine($"Restaurant Location - Zip Code: {restaurantLocation.ZipCode}.");
         }
         private static void PrintLocation(Location location)
         {
-            Console.WriteLine($"Title: {location.Title}.");
-            Console.WriteLine($"Longitude: {location.Longitude}.");
-            Console.WriteLine($"Latitude: {location.Latitude}.");
-            Console.WriteLine($"City ID: {location.City.ID}.");
-            Console.WriteLine($"City Name: {location.City.Name}.");
-            Console.WriteLine($"Country ID: {location.City.Country.ID}.");
-            Console.WriteLine($"Country Name: {location.City.Country.Name}.");
+            Console.WriteLine($"Location - Title: {location.Title}.");
+            Console.WriteLine($"Location - Longitude: {location.Longitude}.");
+            Console.WriteLine($"Location - Latitude: {location.Latitude}.");
+            Console.WriteLine($"Location - City ID: {location.City.ID}.");
+            Console.WriteLine($"Location - City Name: {location.City.Name}.");
+            Console.WriteLine($"Location - Country ID: {location.City.Country.ID}.");
+            Console.WriteLine($"Location - Country Name: {location.City.Country.Name}.");
         }
         private static void PrintPopularity(Popularity popularity)
         {
