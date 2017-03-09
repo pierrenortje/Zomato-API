@@ -5,11 +5,12 @@ namespace Zomato.API.Domain
 {
     internal sealed class ZomatoLocation
     {
-        [JsonProperty("entity_type")]
-        internal string EntityType { get; set; }
-
+        #region Internal Properties
         [JsonProperty("entity_id")]
-        internal int EntityID { get; set; }
+        internal int ID { get; set; }
+
+        [JsonProperty("entity_type")]
+        internal string Type { get; set; }
 
         [JsonProperty("title")]
         internal string Title { get; set; }
@@ -31,6 +32,33 @@ namespace Zomato.API.Domain
 
         [JsonProperty("country_name")]
         internal string CountryName { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal Location ToServiceObject()
+        {
+            var location = new Location
+            {
+                ID = this.ID,
+                Type = this.Type,
+                City = new City
+                {
+                    ID = this.CityID,
+                    Name = this.CityName,
+                    Country = new Country
+                    {
+                        ID = this.CountryID,
+                        Name = this.CountryName
+                    }
+                },
+                Latitude = this.Latitude,
+                Longitude = this.Longitude,
+                Title = this.Title
+            };
+
+            return location;
+        }
+        #endregion
     }
 
     internal sealed class ZomatoLocations : List<ZomatoLocation> { }

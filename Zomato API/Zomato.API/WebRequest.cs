@@ -166,9 +166,8 @@ namespace Zomato.API
             var parameters = new List<KeyValuePair<string, string>>();
 
             parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
-            string response = null;
 
-            response = await webRequest.GetAsync(RestaurantAction.GetDailyMenu, parameters);
+            var response = await webRequest.GetAsync(RestaurantAction.GetDailyMenu, parameters);
 
             if (!string.IsNullOrEmpty(response))
                 dailyMenuRootObject = JsonConvert.DeserializeObject<DailyMenuRootObject>(response);
@@ -196,10 +195,10 @@ namespace Zomato.API
         {
             LocationDetailsRootObject locationDetailsRootObject = null;
 
-            var parameters = new List<KeyValuePair<string, string>>();
-
             if (!locationID.HasValue || string.IsNullOrEmpty(entityType))
                 throw new Exception("You need to specify both the location ID and entity type.");
+
+            var parameters = new List<KeyValuePair<string, string>>();
 
             parameters.AddRange(new List<KeyValuePair<string, string>> {
                         new KeyValuePair<string, string>("entity_id", locationID.Value.ToString()),
@@ -218,10 +217,10 @@ namespace Zomato.API
         {
             LocationRootObject locations = null;
 
-            var parameters = new List<KeyValuePair<string, string>>();
-
             if (string.IsNullOrEmpty(queryText))
                 throw new Exception("You need to specify the search text.");
+
+            var parameters = new List<KeyValuePair<string, string>>();
 
             parameters.Add(new KeyValuePair<string, string>("q", queryText));
 
@@ -258,6 +257,55 @@ namespace Zomato.API
                 reviews = JsonConvert.DeserializeObject<ReviewsRootObject>(response);
 
             return reviews;
+        }
+
+        internal async Task<SearchRootObject> Search(int? entityID, string entityType, string queryText, int? start, int? count, double? latitude, double? longitude, double? radius, string cuisines, string establishmentType, string collectionID, string category, string sort, string order)
+        {
+            if (radius.HasValue && (!latitude.HasValue || !longitude.HasValue))
+                throw new Exception("You need to specify both the latitude and longitude when requesting the radius.");
+
+            SearchRootObject search = null;
+
+            var parameters = new List<KeyValuePair<string, string>>();
+
+            if (entityID.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("entity_id", entityID.Value.ToString()));
+
+            if (!string.IsNullOrEmpty(entityType))
+                parameters.Add(new KeyValuePair<string, string>("entity_type", entityType));
+
+            if (!string.IsNullOrEmpty(queryText))
+                parameters.Add(new KeyValuePair<string, string>("q", queryText));
+
+            if (start.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("start", start.Value.ToString()));
+
+            if (radius.HasValue)
+                parameters.Add(new KeyValuePair<string, string>("radius", radius.Value.ToString()));
+
+            if (!string.IsNullOrEmpty(cuisines))
+                parameters.Add(new KeyValuePair<string, string>("cuisines", cuisines));
+
+            if (!string.IsNullOrEmpty(establishmentType))
+                parameters.Add(new KeyValuePair<string, string>("establishment_type", establishmentType));
+
+            if (!string.IsNullOrEmpty(collectionID))
+                parameters.Add(new KeyValuePair<string, string>("collection_id", collectionID));
+
+            if (!string.IsNullOrEmpty(sort))
+                parameters.Add(new KeyValuePair<string, string>("sort", sort));
+
+            if (!string.IsNullOrEmpty(order))
+                parameters.Add(new KeyValuePair<string, string>("order", order));
+
+            AppendBaseParameters(ref parameters, null, latitude, longitude, count);
+
+            var response = await webRequest.GetAsync(RestaurantAction.Search, parameters);
+
+            if (!string.IsNullOrEmpty(response))
+                search = JsonConvert.DeserializeObject<SearchRootObject>(response);
+
+            return search;
         }
         #endregion
     }

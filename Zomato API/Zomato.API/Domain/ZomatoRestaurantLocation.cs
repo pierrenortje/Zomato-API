@@ -4,6 +4,7 @@ namespace Zomato.API.Domain
 {
     internal sealed class ZomatoRestaurantLocation
     {
+        #region Internal Properties
         [JsonProperty("address")]
         internal string Address { get; set; }
 
@@ -24,5 +25,22 @@ namespace Zomato.API.Domain
 
         [JsonProperty("country_id")]
         internal string CountryID { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal RestaurantLocation ToServiceObject()
+        {
+            var restaurantLocation = new RestaurantLocation
+            {
+                Address = this.Address,
+                CityName = this.CityName,
+                Latitude = this.Latitude,
+                Longitude = this.Longitude,
+                ZipCode = this.ZipCode
+            };
+
+            return restaurantLocation;
+        }
+        #endregion
     }
 }

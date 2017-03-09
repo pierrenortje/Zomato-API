@@ -42,22 +42,7 @@ namespace Zomato.API.Domain
         {
             var locationDetails = new LocationDetails
             {
-                Location = new Location
-                {
-                    EntityType = this.Location.EntityType,
-                    Longitude = this.Location.Longitude,
-                    Latitude = this.Location.Latitude,
-                    Title = this.Location.Title,
-                    City = new City
-                    {
-                        ID = this.Location.CityID,
-                        Name = this.Location.CityName,
-                        Country = new Country
-                        {
-                            Name = this.Location.CountryName
-                        }
-                    }
-                },
+                Location = this.Location.ToServiceObject(),
                 Popularity = new Popularity
                 {
                     PopularityRating = this.Popularity,

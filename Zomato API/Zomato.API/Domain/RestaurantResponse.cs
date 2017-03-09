@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Zomato.API.Domain
 {
@@ -102,62 +103,33 @@ namespace Zomato.API.Domain
                 MenuUrl = this.MenuUrl,
                 PhotosUrl = this.PhotosUrl,
                 ThumbUrl = this.ThumbUrl,
-                Cuisines = this.Cuisines,
+                Cuisines = this.Cuisines?.Split(','),
                 PriceRange = this.PriceRange,
                 AverageCostForTwo = this.AverageCostForTwo,
-                PhoneNumbers = this.PhoneNumbers,
-
+                PhoneNumbers = this.PhoneNumbers?.Split(','),
                 FeaturedImageUrl = this.FeaturedImageUrl,
-                Location = new RestaurantLocation
-                {
-                    Address = this.Location.Address,
-                    CityName = this.Location.CityName,
-                    Latitude = this.Location.Latitude,
-                    Longitude = this.Location.Longitude,
-                    ZipCode = this.Location.ZipCode
-                },
                 TotalPhotos = this.TotalPhotos
             };
 
+            if (this.Location != null)
+                restaurant.Location = this.Location.ToServiceObject();
+
             #region Photos
             if (this.Photos != null)
-            {
                 foreach (var photo in this.Photos)
-                    restaurant.Photos.Add(new Photo
-                    {
-                        ID = photo.ID,
-                        Caption = photo.Caption,
-                        Height = photo.Height,
-                        Width = photo.Width,
-                        LikesCount = photo.LikesCount,
-                        RestaurantID = photo.RestaurantID,
-                        ThumbUrl = photo.ThumbUrl,
-                        Timestamp = photo.Timestamp,
-                        TotalComments = photo.TotalComments,
-                        Url = photo.Url,
-                        User = new User
-                        {
-                            Name = photo.User.Name,
-                            FoodieLevel = photo.User.FoodieLevel,
-                            FoodieLevelNumber = photo.User.FoodieLevelNumber,
-                            ProfileImageUrl = photo.User.ProfileImageUrl,
-                            ProfileUrl = photo.User.ProfileUrl,
-                            ZomatoHandle = photo.User.ZomatoHandle
-                        }
-                    });
-            }
+                    restaurant.Photos.Add(photo.ToServiceObject());
             #endregion
 
             #region Reviews
             if (this.Reviews != null)
-            {
                 foreach (var review in this.Reviews)
                     restaurant.Reviews.Add(review.ToServiceObject());
-            }
             #endregion
 
             return restaurant;
         }
         #endregion
     }
+
+    internal sealed class ZomatoRestaurants : List<ZomatoRestaurant> { }
 }

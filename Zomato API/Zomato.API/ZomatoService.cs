@@ -107,6 +107,21 @@ namespace Zomato.API
 
             return geocode;
         }
+
+        private async Task<SearchResult> SearchAsync(int? entityID, string entityType, string queryText, int? start, int? count, double? longitude, double? latitude, double? radius, string cuisines, string establishmentID, string collectionID, string categoryIDs, string sort, string order)
+        {
+            SearchResult searchResult = null;
+            SearchRootObject searchResponse = null;
+
+            searchResponse = await webRequest.Search(entityID, entityType, queryText, start, count, latitude, longitude, radius, cuisines, establishmentID, collectionID, categoryIDs, sort, order);
+
+            if (searchResponse == null)
+                return searchResult;
+
+            searchResult = searchResponse.ToServiceObject();
+
+            return searchResult;
+        }
         #endregion
     }
 }

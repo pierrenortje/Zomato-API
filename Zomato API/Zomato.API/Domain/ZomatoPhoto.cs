@@ -5,6 +5,7 @@ namespace Zomato.API.Domain
 {
     internal sealed class ZomatoPhoto
     {
+        #region Internal Properties
         [JsonProperty("id")]
         internal string ID { get; set; }
 
@@ -43,6 +44,29 @@ namespace Zomato.API.Domain
 
         [JsonProperty("likes_count")]
         internal string LikesCount { get; set; }
+        #endregion
+
+        #region Internal Methods
+        internal Photo ToServiceObject()
+        {
+            var photo = new Photo
+            {
+                ID = this.ID,
+                Caption = this.Caption,
+                Height = this.Height,
+                Width = this.Width,
+                LikesCount = this.LikesCount,
+                RestaurantID = this.RestaurantID,
+                ThumbUrl = this.ThumbUrl,
+                Timestamp = this.Timestamp,
+                TotalComments = this.TotalComments,
+                Url = this.Url,
+                User = this.User.ToServiceObject()
+            };
+
+            return photo;
+        }
+        #endregion
     }
 
     internal sealed class ZomatoPhotos : List<ZomatoPhoto> { }

@@ -27,10 +27,10 @@ namespace Zomato.API.Domain
         internal string NightlifeRestaurants { get; set; }
 
         [JsonProperty("subzone")]
-        internal string SubZoneName { get; set; }
+        internal string SubzoneName { get; set; }
 
         [JsonProperty("subzone_id")]
-        internal int SubZoneID { get; set; }
+        internal int SubzoneID { get; set; }
 
         [JsonProperty("city")]
         internal string CityName { get; set; }

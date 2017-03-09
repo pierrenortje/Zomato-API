@@ -10,7 +10,7 @@ namespace Zomato.API.Domain
         public List<string> TopCuisines { get; set; }
         public string TotalPopularityRestaurants { get; set; }
         public string NightlifeRestaurants { get; set; }
-        public SubZone SubZone { get; set; }
+        public Subzone Subzone { get; set; }
         public City City { get; set; }
     }
 }

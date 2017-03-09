@@ -26,22 +26,7 @@ namespace Zomato.API.Domain
             if (this.Locations.Count > 0)
             {
                 foreach (var location in this.Locations)
-                    locations.Add(new Location
-                    {
-                        City = new City
-                        {
-                            ID = location.CityID,
-                            Name = location.CityName,
-                            Country = new Country
-                            {
-                                ID = location.CountryID,
-                                Name = location.CountryName
-                            }
-                        },
-                        Latitude = location.Latitude,
-                        Longitude = location.Longitude,
-                        Title = location.Title
-                    });
+                    locations.Add(location.ToServiceObject());
             }
 
             return locations;

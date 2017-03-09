@@ -33,22 +33,7 @@ namespace Zomato.API.Domain
         {
             var geocode = new Geocode
             {
-                Location = new Location
-                {
-                    City = new City
-                    {
-                        ID = this.Location.CityID,
-                        Name = this.Location.CityName,
-                        Country = new Country
-                        {
-                            ID = this.Location.CountryID,
-                            Name = this.Location.CountryName
-                        }
-                    },
-                    Latitude = this.Location.Latitude,
-                    Longitude = this.Location.Longitude,
-                    Title = this.Location.Title
-                },
+                Location = this.Location.ToServiceObject(),
                 Link = this.Link,
                 Popularity = new Popularity
                 {
@@ -56,10 +41,10 @@ namespace Zomato.API.Domain
                     {
                         Name = this.Popularity.CityName
                     },
-                    SubZone = new SubZone
+                    Subzone = new Subzone
                     {
-                        ID = this.Popularity.SubZoneID,
-                        Name = this.Popularity.SubZoneName
+                        ID = this.Popularity.SubzoneID,
+                        Name = this.Popularity.SubzoneName
                     },
                     NearbyRestaurantIDs = this.Popularity.NearbyRestaurantIDs,
                     NightlifeIndex = this.Popularity.NightlifeIndex,

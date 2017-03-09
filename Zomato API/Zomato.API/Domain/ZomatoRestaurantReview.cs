@@ -37,7 +37,7 @@ namespace Zomato.API.Domain
 
         internal Review ToServiceObject()
         {
-            var Review = new Review
+            var review = new Review
             {
                 ID = this.ID,
                 Rating = this.Rating,
@@ -49,7 +49,7 @@ namespace Zomato.API.Domain
                 User = this.User.ToServiceObject()
             };
 
-            return Review;
+            return review;
         }
     }
 
