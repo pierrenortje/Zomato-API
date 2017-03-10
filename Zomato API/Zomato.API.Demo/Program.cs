@@ -24,25 +24,23 @@ namespace Zomato.API.Demo
     /// Zomato Enpoints:
     /// 
     ///     CommonController:
-    ///         • GET /categories           [COMPLETED]
-    ///         • GET /cities               [COMPLETED]
-    ///         • GET /collections          [COMPLETED]
-    ///         • GET /cuisines             [COMPLETED]
-    ///         • GET /establishments       [COMPLETED]
-    ///         • GET /geocode              [COMPLETED]
+    ///         • GET /categories
+    ///         • GET /cities
+    ///         • GET /collections
+    ///         • GET /cuisines
+    ///         • GET /establishments
+    ///         • GET /geocode
     ///         
     ///     LocationCommonController:
-    ///         • GET /location_details     [COMPLETED]
-    ///         • GET /locations            [COMPLETED]
+    ///         • GET /location_details
+    ///         • GET /locations
     ///         
     ///     RestaurantController:
-    ///         • GET /dailymenu            [COMPLETED]
-    ///         • GET /restaurant           [COMPLETED]
-    ///         • GET /reviews              [COMPLETED]
-    ///         • GET /search               [COMPLETED]
+    ///         • GET /dailymenu
+    ///         • GET /restaurant
+    ///         • GET /reviews
+    ///         • GET /search
     ///         
-    /// Acronyms:
-    ///     • TBC: To be completed.
     /// </summary>
     class Program
     {
