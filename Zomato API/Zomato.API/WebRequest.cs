@@ -11,23 +11,12 @@ namespace Zomato.API
     internal sealed class WebRequest
     {
         #region Private Fields
-        private NTEC.Net.WebRequest webRequest = null;
         private string apiKey = ConfigurationHelper.GetApiKey();
         #endregion
 
         #region Private Const Fields
         private const string apiRequestUrl = "https://developers.zomato.com/api/v2.1/";
         private const string userKeyHeaderKey = "user-key";
-        #endregion
-
-        #region Constructor
-        internal WebRequest()
-        {
-            webRequest = new NTEC.Net.WebRequest(apiRequestUrl)
-            {
-                Headers = new List<KeyValuePair<string, string>> { UserKey }
-            };
-        }
         #endregion
 
         #region Private Properties
@@ -65,7 +54,13 @@ namespace Zomato.API
         {
             CategoriesRootObject categoriesResponse = null;
 
-            var response = await webRequest.GetAsync(CommonAction.SelectCategories);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectCategories);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync();
 
             if (!string.IsNullOrEmpty(response))
                 categoriesResponse = JsonConvert.DeserializeObject<CategoriesRootObject>(response);
@@ -87,7 +82,13 @@ namespace Zomato.API
             if (cityIDs?.Length > 0)
                 parameters.Add(new KeyValuePair<string, string>("city_ids", string.Join(",", cityIDs)));
 
-            var response = await webRequest.GetAsync(CommonAction.SelectCities, parameters);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectCities);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 citiesResponse = JsonConvert.DeserializeObject<CitiesRootObject>(response);
@@ -103,7 +104,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
 
-            var response = await webRequest.GetAsync(CommonAction.SelectCollections, parameters);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectCollections);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 collectionsResponse = JsonConvert.DeserializeObject<CollectionsRootObject>(response);
@@ -119,7 +126,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, count);
 
-            var response = await webRequest.GetAsync(CommonAction.SelectCuisines, parameters);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectCuisines);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 cuisinesRootObject = JsonConvert.DeserializeObject<CuisinesRootObject>(response);
@@ -135,7 +148,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, cityID, latitude, longitude, null);
 
-            var response = await webRequest.GetAsync(CommonAction.SelectEstablishments, parameters);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectEstablishments);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 establishmentsRootObject = JsonConvert.DeserializeObject<EstablishmentsRootObject>(response);
@@ -151,7 +170,13 @@ namespace Zomato.API
 
             parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
 
-            var response = await webRequest.GetAsync(RestaurantAction.Get, parameters);
+            string url = string.Concat(apiRequestUrl, RestaurantAction.Get);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 restaurantRootObject = JsonConvert.DeserializeObject<ZomatoRestaurant>(response);
@@ -167,7 +192,13 @@ namespace Zomato.API
 
             parameters.Add(new KeyValuePair<string, string>("res_id", restaurantID.ToString()));
 
-            var response = await webRequest.GetAsync(RestaurantAction.GetDailyMenu, parameters);
+            string url = string.Concat(apiRequestUrl, RestaurantAction.GetDailyMenu);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 dailyMenuRootObject = JsonConvert.DeserializeObject<DailyMenuRootObject>(response);
@@ -183,7 +214,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, null, latitude, longitude, null);
 
-            var response = await webRequest.GetAsync(CommonAction.SelectGeocode, parameters);
+            string url = string.Concat(apiRequestUrl, CommonAction.SelectGeocode);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 geocodeRootObject = JsonConvert.DeserializeObject<GeocodeRootObject>(response);
@@ -205,7 +242,13 @@ namespace Zomato.API
                         new KeyValuePair<string, string>("entity_type", entityType)
                 });
 
-            var response = await webRequest.GetAsync(LocationActions.GetDetails, parameters);
+            string url = string.Concat(apiRequestUrl, LocationActions.GetDetails);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            string response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 locationDetailsRootObject = JsonConvert.DeserializeObject<LocationDetailsRootObject>(response);
@@ -226,7 +269,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, null, latitude, longitude, count);
 
-            var response = await webRequest.GetAsync(LocationActions.Search, parameters);
+            string url = string.Concat(apiRequestUrl, LocationActions.Search);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 locations = JsonConvert.DeserializeObject<LocationRootObject>(response);
@@ -251,7 +300,13 @@ namespace Zomato.API
             if (count.HasValue)
                 parameters.Add(new KeyValuePair<string, string>("count", start.ToString()));
 
-            var response = await webRequest.GetAsync(RestaurantAction.SelectReviews, parameters);
+            string url = string.Concat(apiRequestUrl, RestaurantAction.SelectReviews);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 reviews = JsonConvert.DeserializeObject<ReviewsRootObject>(response);
@@ -300,7 +355,13 @@ namespace Zomato.API
 
             AppendBaseParameters(ref parameters, null, latitude, longitude, count);
 
-            var response = await webRequest.GetAsync(RestaurantAction.Search, parameters);
+            string url = string.Concat(apiRequestUrl, RestaurantAction.Search);
+            var webRequest = new NTEC.Net.WebRequest(url)
+            {
+                Headers = new List<KeyValuePair<string, string>> { UserKey }
+            };
+
+            var response = await webRequest.GetAsync(parameters);
 
             if (!string.IsNullOrEmpty(response))
                 search = JsonConvert.DeserializeObject<SearchRootObject>(response);

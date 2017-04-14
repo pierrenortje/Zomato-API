@@ -31,7 +31,7 @@ namespace Zomato.API.Demo
     ///         • GET /establishments
     ///         • GET /geocode
     ///         
-    ///     LocationCommonController:
+    ///     LocationController:
     ///         • GET /location_details
     ///         • GET /locations
     ///         
