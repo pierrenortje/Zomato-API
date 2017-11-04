@@ -1,10 +1,32 @@
-﻿using System;
+﻿#region License
+// Copyright (c) 2017 Pierre Nortje
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+
+using System;
 using System.Threading.Tasks;
 using Zomato.API.Domain;
 
-/*
- * TODO: 2017-03-09 - pierre.nortje - Need to add non-async support.
- */
 namespace Zomato.API.Demo
 {
     /// <summary>
@@ -17,9 +39,6 @@ namespace Zomato.API.Demo
     ///     
     /// Notes:
     ///     • Zomato limits to 1000 calls/day (see https://developers.zomato.com/api)
-    ///     
-    /// Zomato API Key:
-    ///     • 469e676c2fd3ab263e191cc78e2ae876
     /// 
     /// Zomato Enpoints:
     /// 
@@ -64,14 +83,14 @@ namespace Zomato.API.Demo
         #region Public Static Methods
         public static void Main(string[] args)
         {
-            Task.Run(() => MainAsync());
+            Task.Run(async () => await MainAsync());
 
             Console.ReadLine();
         }
         #endregion
 
         #region Private Static Methods
-        private static async void MainAsync()
+        private static async Task MainAsync()
         {
             try
             {
@@ -102,7 +121,7 @@ namespace Zomato.API.Demo
 
                 //await SelectReviewsAsync(restaurantID, null, null);
 
-                await SearchAsync(restaurantName);
+                //await SearchAsync(restaurantName);
             }
             catch (Exception ex)
             {

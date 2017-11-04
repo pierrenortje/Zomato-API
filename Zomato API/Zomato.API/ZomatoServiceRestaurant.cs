@@ -1,4 +1,29 @@
-﻿using System.Threading.Tasks;
+﻿#region License
+// Copyright (c) 2017 Pierre Nortje
+//
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following
+// conditions:
+//
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+// OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+// WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+// OTHER DEALINGS IN THE SOFTWARE.
+#endregion
+
+using System.Threading.Tasks;
 using Zomato.API.Domain;
 
 namespace Zomato.API
@@ -91,6 +116,7 @@ namespace Zomato.API
         /// Search by location ID.
         /// </summary>
         /// <param name="locationID">The location's ID.</param>
+        /// <param name="locationType">The location type.</param>
         /// <param name="longitude">The longitude.</param>
         /// <param name="latitude">The latitude.</param>
         /// <param name="radius">The radius.</param>
@@ -99,9 +125,26 @@ namespace Zomato.API
         /// <param name="sort">The sort order.</param>
         /// <param name="order">The order in which to sort.</param>
         /// <returns>A list of restaurants.</returns>
-        public async Task<SearchResult> SearchByLocationIDAsync(int locationID, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
+        public async Task<SearchResult> SearchByLocationIDAsync(int locationID, string locationType, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(locationID, null, null, start, null, longitude, latitude, radius, null, null, null, null, sort, order);
+            return await SearchAsync(locationID, locationType, null, start, count, longitude, latitude, radius, null, null, null, null, sort, order);
+        }
+        /// <summary>
+        /// Search by location ID.
+        /// </summary>
+        /// <param name="locationID">The location's ID.</param>
+        /// <param name="locationType">The location type.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="radius">The radius.</param>
+        /// <param name="start">The offset to fetch results from.</param>
+        /// <param name="count">Amount of results to return.</param>
+        /// <param name="sort">The sort order.</param>
+        /// <param name="order">The order in which to sort.</param>
+        /// <returns>A list of restaurants.</returns>
+        public async Task<SearchResult> SearchByLocationIDCategoriesAsync(int locationID, string locationType, string[] categoryIDs, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
+        {
+            return await SearchAsync(locationID, locationType, null, start, count, longitude, latitude, radius, null, null, null, string.Join(",", categoryIDs), sort, order);
         }
         /// <summary>
         /// Search by location type.
@@ -117,7 +160,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByLocationTypeAsync(string locationType, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, locationType, null, start, null, longitude, latitude, radius, null, null, null, null, sort, order);
+            return await SearchAsync(null, locationType, null, start, count, longitude, latitude, radius, null, null, null, null, sort, order);
         }
         /// <summary>
         /// Search by keyword.
@@ -133,7 +176,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByKeywordAsync(string queryText, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, queryText, start, null, longitude, latitude, radius, null, null, null, null, sort, order);
+            return await SearchAsync(null, null, queryText, start, count, longitude, latitude, radius, null, null, null, null, sort, order);
         }
         /// <summary>
         /// Search by longitude and latitude.
@@ -148,7 +191,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByLocationAsync(double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, null, start, null, longitude, latitude, radius, null, null, null, null, sort, order);
+            return await SearchAsync(null, null, null, start, count, longitude, latitude, radius, null, null, null, null, sort, order);
         }
         /// <summary>
         /// Search by cuisines.
@@ -164,7 +207,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByCuisineAsync(string[] cuisines, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, null, start, null, longitude, latitude, radius, string.Join(",", cuisines), null, null, null, sort, order);
+            return await SearchAsync(null, null, null, start, count, longitude, latitude, radius, string.Join(",", cuisines), null, null, null, sort, order);
         }
         /// <summary>
         /// Search by establishment ID.
@@ -180,7 +223,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByEstablishmentIDAsync(string establishmentID, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, null, start, null, longitude, latitude, radius, null, establishmentID, null, null, sort, order);
+            return await SearchAsync(null, null, null, start, count, longitude, latitude, radius, null, establishmentID, null, null, sort, order);
         }
         /// <summary>
         /// Search by collection ID.
@@ -196,7 +239,7 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByCollectionIDAsync(string collectionID, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, null, start, null, longitude, latitude, radius, null, null, collectionID, null, sort, order);
+            return await SearchAsync(null, null, null, start, count, longitude, latitude, radius, null, null, collectionID, null, sort, order);
         }
         /// <summary>
         /// Search by category IDs.
@@ -212,7 +255,23 @@ namespace Zomato.API
         /// <returns>A list of restaurants.</returns>
         public async Task<SearchResult> SearchByCategoryIDsAsync(string[] categoryIDs, double? longitude = null, double? latitude = null, double? radius = null, int? start = null, int? count = null, string sort = null, string order = null)
         {
-            return await SearchAsync(null, null, null, start, null, longitude, latitude, radius, null, null, null, string.Join(",", categoryIDs), sort, order);
+            return await SearchAsync(null, null, null, start, count, longitude, latitude, radius, null, null, null, string.Join(",", categoryIDs), sort, order);
+        }
+        /// <summary>
+        /// Search by category IDs.
+        /// </summary>
+        /// <param name="categoryIDs">An array of category IDs.</param>
+        /// <param name="longitude">The longitude.</param>
+        /// <param name="latitude">The latitude.</param>
+        /// <param name="radius">The radius.</param>
+        /// <param name="start">The offset to fetch results from.</param>
+        /// <param name="count">Amount of results to return.</param>
+        /// <param name="sort">The sort order.</param>
+        /// <param name="order">The order in which to sort.</param>
+        /// <returns>A list of restaurants.</returns>
+        public async Task<SearchResult> SearchAllAsync(int? locationID = null, string locationType = null, string queryText = null, int? start = null, int? count = null, double? longitude = null, double? latitude = null, double? radius = null, string cuisines = null, string establishmentID = null, string collectionID = null, string[] categoryIDs = null, string sort = null, string order = null)
+        {
+            return await SearchAsync(locationID, locationType, queryText, start, count, latitude, longitude, radius, cuisines, establishmentID, collectionID, categoryIDs != null ? string.Join(",", categoryIDs) : null, sort, order);
         }
         #endregion
     }
