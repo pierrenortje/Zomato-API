@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NTEC.IO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\NTEC.IO.dll</HintPath>
@@ -41,6 +37,10 @@
     <Reference Include="NTEC.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\libraries\NTEC.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="RestSharp, Version=105.2.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.105.2.3\lib\net45\RestSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,63 +53,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\CommonController.cs" />
-    <Compile Include="Controllers\LocationController.cs" />
-    <Compile Include="Controllers\RestaurantController.cs" />
-    <Compile Include="Domain\CategoryResponse.cs" />
-    <Compile Include="Domain\Category.cs" />
-    <Compile Include="Domain\City.cs" />
-    <Compile Include="Domain\CityResponse.cs" />
-    <Compile Include="Domain\LocationDetailsResponse.cs" />
-    <Compile Include="Domain\LocationDetails.cs" />
-    <Compile Include="Domain\CollectionResponse.cs" />
-    <Compile Include="Domain\Collection.cs" />
-    <Compile Include="Domain\Country.cs" />
-    <Compile Include="Domain\Cuisine.cs" />
-    <Compile Include="Domain\CuisineResponse.cs" />
-    <Compile Include="Domain\Geocode.cs" />
-    <Compile Include="Domain\GeocodeResponse.cs" />
-    <Compile Include="Domain\DailyMenu.cs" />
-    <Compile Include="Domain\DailyMenuResponse.cs" />
-    <Compile Include="Domain\Establishment.cs" />
-    <Compile Include="Domain\EstablishmentResponse.cs" />
-    <Compile Include="Domain\Location.cs" />
-    <Compile Include="Domain\LocationResponse.cs" />
-    <Compile Include="Domain\LocationType.cs" />
-    <Compile Include="Domain\Photo.cs" />
-    <Compile Include="Domain\RestaurantLocation.cs" />
-    <Compile Include="Domain\Popularity.cs" />
-    <Compile Include="Domain\Restaurant.cs" />
-    <Compile Include="Domain\RestaurantResponse.cs" />
-    <Compile Include="Domain\Review.cs" />
-    <Compile Include="Domain\ReviewCollection.cs" />
-    <Compile Include="Domain\ReviewsResponse.cs" />
-    <Compile Include="Domain\SearchResult.cs" />
-    <Compile Include="Domain\SearchResponse.cs" />
-    <Compile Include="Domain\SortBy.cs" />
-    <Compile Include="Domain\SortOrder.cs" />
-    <Compile Include="Domain\Subzone.cs" />
-    <Compile Include="Domain\User.cs" />
-    <Compile Include="Domain\ZomatoCity.cs" />
-    <Compile Include="Domain\ZomatoLocation.cs" />
-    <Compile Include="Domain\ZomatoPhoto.cs" />
-    <Compile Include="Domain\ZomatoPopularity.cs" />
-    <Compile Include="Domain\ZomatoRestaurantLocation.cs" />
-    <Compile Include="Domain\ZomatoRestaurantReview.cs" />
-    <Compile Include="Domain\ZomatoUser.cs" />
-    <Compile Include="Domain\ZomatoUserRating.cs" />
-    <Compile Include="Util\ConfigurationHelper.cs" />
-    <Compile Include="WebRequest.cs" />
-    <Compile Include="ZomatoService.cs" />
+    <Compile Include="ApiRequest.cs" />
+    <Compile Include="Interfaces\ICommonRequest.cs" />
+    <Compile Include="Interfaces\ILocationRequest.cs" />
+    <Compile Include="Interfaces\IRestaurantRequest.cs" />
+    <Compile Include="Models\CategoriesData.cs" />
+    <Compile Include="Models\CitiesData.cs" />
+    <Compile Include="Models\LocationDetailsData.cs" />
+    <Compile Include="Models\CollectionsData.cs" />
+    <Compile Include="Models\CuisinesData.cs" />
+    <Compile Include="Models\GeocodeData.cs" />
+    <Compile Include="Models\DailyMenuData.cs" />
+    <Compile Include="Models\EstablishmentsData.cs" />
+    <Compile Include="Models\LocationData.cs" />
+    <Compile Include="Models\LocationType.cs" />
+    <Compile Include="Models\Restaurant.cs" />
+    <Compile Include="Models\ReviewsData.cs" />
+    <Compile Include="Models\SearchData.cs" />
+    <Compile Include="Models\SortBy.cs" />
+    <Compile Include="Models\SortOrder.cs" />
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\Popularity.cs" />
+    <Compile Include="Models\RestaurantLocation.cs" />
+    <Compile Include="Models\Review.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRating.cs" />
+    <Compile Include="Requests\RequestBase.cs" />
+    <Compile Include="Requests\CommonRequest.cs" />
+    <Compile Include="Requests\LocationRequest.cs" />
+    <Compile Include="Requests\RestaurantRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ZomatoServiceCommon.cs" />
-    <Compile Include="ZomatoServiceLocation.cs" />
-    <Compile Include="ZomatoServiceRestaurant.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
